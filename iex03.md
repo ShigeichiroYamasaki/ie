@@ -1,5 +1,10 @@
 # インターネット工学演習 03
 
+## レポートURL
+
+[https://forms.gle/VcvxQuRvGB65wtgC8](https://forms.gle/VcvxQuRvGB65wtgC8)
+
+
 ## IPアドレス関係情報の確認
 
 ```
@@ -121,3 +126,6 @@ $ whois 157.13.1.1
 * DNSサーバのIPアドレスの確認
 * デフォルトゲートウェーの確認
 
+## レポートURL
+
+[https://forms.gle/VcvxQuRvGB65wtgC8](https://forms.gle/VcvxQuRvGB65wtgC8)
