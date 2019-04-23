@@ -95,10 +95,10 @@ traceroute to 8.8.8.8 (8.8.8.8), 64 hops max, 52 byte packets
 
 ```
 
-いろいろなサイトまでの
+いろいろなサイトまでの経路を確認する
 
 * yahoo のサーバ www.yahoo.co.jp
-* 近畿大学産業理工学部のDNSサーバ １５７．１３．1.1
+* 近畿大学産業理工学部のDNSサーバ 157.13.61.1
 * 九工大のwebサーバ  www.kyutech.ac.jp
 
 ## whois データベースの確認
@@ -109,7 +109,7 @@ traceroute to 8.8.8.8 (8.8.8.8), 64 hops max, 52 byte packets
 $ whois 157.13.1.1
 ```
 
-いろいろなサイトの whois データベースの情報を確認する
+いろいろなIPアドレスの whois データベースの情報を確認する
 
 * 8.8.8.8
 * 1.1.1.1
