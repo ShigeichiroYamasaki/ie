@@ -1,133 +1,123 @@
 # インターネット工学演習 03
 
-## LANインターフェスの設定
-
-
-### ファイルの内容を見るコマンド
-
-	cat       ファイルの中を全部表示する
-
-	less　　	ファイルの中を少しずつ表示する
-
- 例
- 
-```
-$ cat /etc/bashrc 
-```
-    
-### 隣の人のIPアドレスを確認する
-    
-それぞれ以下のコマンドを実行してIPアドレスを隣の人に教える
-
-	 ip addr		ネットワーク・インターフェースごとのipアドレスなどの情報を表示させる
-
+## IPアドレス関係情報の確認
 
 ```
 $ ip addr
 
-1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
-    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-    inet 127.0.0.1/8 scope host lo
-       valid_lft forever preferred_lft forever
-    inet6 ::1/128 scope host 
-       valid_lft forever preferred_lft forever
-2: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
-    link/ether 74:d4:35:c6:0b:b3 brd ff:ff:ff:ff:ff:ff
-    inet 192.168.0.18/24 brd 192.168.0.255 scope global noprefixroute enp3s0
-       valid_lft forever preferred_lft forever
-    inet6 fe80::8aa6:d0ba:d83d:c568/64 scope link noprefixroute 
-       valid_lft forever preferred_lft forever
-3: wlp2s0: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
-    link/ether 54:27:1e:9e:9f:27 brd ff:ff:ff:ff:ff:ff
-
-```
-    
-### ●カレントディレクトリの確認
-    
-```
-$ pwd
-```
-
-## 利用者の登録
-
-```
-$ sudo adduser <ユーザ名>
-```
-
-   パスワードを２回入れる
-   （パスワードはエコーバックされない）
-
-## nanoエディタの使い方
-
-```
-$ nano <ファイル名>
-```
-
-### 画面の下のメニューの見方
-
-  ^X などは、controlキーを押しながらｘを押すという意味
-   M-X などは、escキーを押してxを押すという意味
-
-### 編集したデータの保存方法
-
-    ^X して　Y で保存終了
-
-### カットアンドペースト
-
-    ^K でカットして、^U で貼り付け
-
-### 文字列の検索
-
-    ^W 検索文字列
-
-## 環境変数の確認
-
-```
-$ printenv
-```
-
-```
-$ printenv PATH
-```
-
-## 環境変数の変更
-
-```
-$ export export PS1="> "
-$ export export PS1="$ "
-```
-    
-## ネットワークインターフェースの確認
-
-```
 $ ifconfig
-    
-$ ip addr
-    
-$ sudo arp -a
-    
-$ ping <隣の人のIPアドレス>
 ```
 
-## シャットダウンの方法
+まわりの人のIPアドレス関係情報の確認する
+
+* ipアドレス
+* サブネットマスク
+* ブロードキャストアドレス
+* MACアドレス (ether)
+
+## ルーティングテーブルの確認
 
 ```
-$ shutdown -h now
+$ netstat -r
+
+カーネルIP経路テーブル
+受信先サイト    ゲートウェイ    ネットマスク   フラグ Metric Ref 使用数 インタフェース
+default         _gateway        0.0.0.0         UG    100    0        0 enp3s0
+link-local      0.0.0.0         255.255.0.0     U     1000   0        0 enp3s0
+192.168.0.0     0.0.0.0         255.255.255.0   U     100    0        0 enp3s0
+
 ```
 
-## シェルの環境設定
+* デフォルトゲートウェイの確認
+* 
 
+## ARPテーブルの確認
 
 ```
-$ cd ~
-$ ls -a
+$ arp
 ```
-    
-### ~/.bashrc の編集
 
-```    
-$ nano .bashrc
-```    
-    
-    
+* MACアドレスとIPアドレスの対応
+
+## ping による導通確認
+
+確認したい相手のIPアドレスを知る
+
+```
+$ ping 192.168.1.X
+
+PING 192.168.0.18 (192.168.0.18): 56 data bytes
+64 bytes from 192.168.0.18: icmp_seq=0 ttl=64 time=7.093 ms
+64 bytes from 192.168.0.18: icmp_seq=1 ttl=64 time=7.443 ms
+64 bytes from 192.168.0.18: icmp_seq=2 ttl=64 time=6.654 ms
+64 bytes from 192.168.0.18: icmp_seq=3 ttl=64 time=6.111 ms
+
+(コントロール ｃ) で終了する
+```
+
+* そのマシンまでの往復時間を確認する
+
+### 様々なサイトにping してみる
+
+* GOOGLEのDNSサーバ  8.8.8.8
+* yahoo のサーバ www.yahoo.co.jp
+* 近畿大学産業理工学部のDNSサーバ １５７．１３．1.1
+
+### ping した後にARPテーブルを再確認する
+
+```
+$ arp
+```
+
+## traceroute で経路を確認する
+
+```
+$ traceroute 8.8.8.8
+
+traceroute to 8.8.8.8 (8.8.8.8), 64 hops max, 52 byte packets
+ 1  ia201wl4 (192.168.0.1)  7.978 ms  5.241 ms  5.784 ms
+ 2  oha-mx480-bbbas05.qtnet.ad.jp (218.40.227.156)  10.688 ms  10.055 ms  9.346 ms
+ 3  211.132.104.33 (211.132.104.33)  9.649 ms
+    211.132.104.37 (211.132.104.37)  11.368 ms
+    211.132.104.33 (211.132.104.33)  9.512 ms
+ 4  61.203.192.241 (61.203.192.241)  11.010 ms
+    61.203.192.237 (61.203.192.237)  11.930 ms
+    61.203.192.249 (61.203.192.249)  10.036 ms
+ 5  61.203.193.126 (61.203.193.126)  25.828 ms
+    61.203.193.122 (61.203.193.122)  24.705 ms  25.398 ms
+ 6  61.203.192.177 (61.203.192.177)  23.924 ms  27.273 ms  24.774 ms
+ 7  108.170.242.129 (108.170.242.129)  26.158 ms  26.731 ms
+    108.170.242.161 (108.170.242.161)  24.342 ms
+ 8  64.233.174.187 (64.233.174.187)  26.882 ms
+    72.14.236.107 (72.14.236.107)  23.827 ms
+    209.85.250.45 (209.85.250.45)  23.553 ms
+ 9  google-public-dns-a.google.com (8.8.8.8)  26.772 ms  24.187 ms  24.120 ms
+
+```
+
+いろいろなサイトまでの
+
+* yahoo のサーバ www.yahoo.co.jp
+* 近畿大学産業理工学部のDNSサーバ １５７．１３．1.1
+* 九工大のwebサーバ  www.kyutech.ac.jp
+
+## whois データベースの確認
+
+### 近畿大学産業理工学部のIPアドレスのwhoisデータベース情報の確認
+
+```
+$ whois 157.13.1.1
+```
+
+いろいろなサイトの whois データベースの情報を確認する
+
+* 8.8.8.8
+* 1.1.1.1
+* traceroute の途中経路のIPアドレスの情報を確認する
+
+## IPアドレスを手動設定する
+
+* IPアドレスとサブネットマスクの確認
+* DNSサーバのIPアドレスの確認
+* デフォルトゲートウェーの確認
 

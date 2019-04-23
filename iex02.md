@@ -234,13 +234,13 @@ kindai
 ## 環境変数 LANG変更の例
 
 ```
-$ LANG=ja_JP.UTF-8
+$ export LANG=ja_JP.UTF-8
 $ date +%x
 2019年04月17日
-$ LANG=en_GB.UTF-8
+$ export LANG=en_GB.UTF-8
 $ date +%x
 17/04/19
-$ LANG=en_US.UTF-8
+$ export LANG=en_US.UTF-8
 $ date +%x
 04/17/2019
 
@@ -272,6 +272,28 @@ $ echo $PATH
 #### 文字列の検索
 
 *    ^W 検索文字列
+
+## ssh のインストール
+
+```
+sudo apt install ssh
+```
+
+### 各マシンでのIPアドレスの確認
+
+```
+ip addr
+```
+
+IP アドレスを確認し、隣同士でIPアドレスを教える
+
+	i92.268.1.X
+	
+### ssh でリモートログイン
+
+```
+ssh kindai@192.168.1.X
+```
 
 # 提出レポートURL
 
