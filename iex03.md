@@ -120,6 +120,23 @@ $ whois 157.13.1.1
 * 1.1.1.1
 * traceroute の途中経路のIPアドレスの情報を確認する
 
+## DNS関連情報
+
+```
+$ dig
+```
+
+### host コマンドでIPアドレスを確認する
+
+```
+$ host www.kindai.ac.jp
+```
+### host コマンドでnsレコードを確認する
+
+```
+$ host -t ns kindai.ac.jp
+```
+
 ## IPアドレスを手動設定する
 
 * IPアドレスとサブネットマスクの確認
