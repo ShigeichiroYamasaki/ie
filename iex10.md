@@ -8,6 +8,83 @@
 ](https://forms.gle/K9n1nzYbuE52gVmTA
 )
 
+## digコマンド
+
+* 特定のネームサーバに対してQUERYを発行する
+
+```
+$ dig A <domain> @<name server> 
+```
+
+```
+dig A dns.joho.fuk.kindai.ac.jp @rs6000.cc.kindai.ac.jp
+```
+	
+* IPアドレスからドメイン名を取得する（逆引き)
+
+```
+$ dig -x <ipaddress>
+```
+
+```
+dig -x 157.13.61.6
+dig -x 157.13.59.1
+```
+
+* ドメイン名に対応するMXレコードを取得する
+
+```
+$dig MX <domain>
+dig MX fuk.kindai.ac.jp
+```
+
+* ルートDNSから確認を行う
+
+```
+$dig ドメイン名 +trace
+```
+
+* ルートDNSから確認を行う
+
+```
+$dig ネームサーバー soa
+```
+
+## apt-getを使ったインストール
+
+```
+sudo apt-get install パッケージ名
+
+```
+
+```
+sudo apt-get -y install apache2 
+```
+
+
+### named (bind9) のインストール
+
+```
+sudo apt -y install bind9 bind9utils 
+
+```
+
+### bind9 の設定
+
+* BINDのオプションを設定
+
+
+/etc/bind/named.conf.options
+
+```
+sudo emacs  /etc/bind/named.conf.options
+```
+
+/etc/bind/named.conf.local 
+
+```
+sudo emacs /etc/bind/named.conf.local 
+```
 
 ## ソースコードからのソフトのインストール方法
 
@@ -68,15 +145,5 @@ sudo make install
 
  展開　tar xfz ファイル名      tar xfj  ファイル名
 
-## apt-getを使ったインストール
-
-```
-sudo apt-get install パッケージ名
-
-```
-
-```
-sudo apt-get -y install apache2 
-```
 
 
