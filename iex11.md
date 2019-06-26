@@ -98,7 +98,7 @@ sudo a2enmod cgi
 
 ### apache2 に.rb ファイルをCGIとして実行できるように設定する
 
-apache2 の設定ファイルのディレクトリに移動
+#### apache2 の設定ファイルのディレクトリ
 
 ```bash
 cd /etc/apache2/conf-available
