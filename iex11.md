@@ -4,8 +4,8 @@
 
 ## レポートURL
 
-[https://forms.gle/ozTrGNggPfvw2gdu6
-](https://forms.gle/ozTrGNggPfvw2gdu6
+[https://forms.gle/SrFbh1n7kTdGkUHU7
+](https://forms.gle/SrFbh1n7kTdGkUHU7
 )
 
 ## aptによるapache2 のインストール
@@ -65,7 +65,7 @@ URL
 
 ```bash
 cd /var/www/html
-nano index.html
+sudo nano index.html
 ```
 
 
@@ -113,7 +113,7 @@ sudo nano /etc/apache2/conf-available/serve-cgi-bin.conf
 ```
 ...
                 <Directory "/usr/lib/cgi-bin">
-                        Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+                        Options +ExecCGI 
                         AddHandler cgi-script .cgi .rb
                         AllowOverride None
                         Require all granted
@@ -208,6 +208,10 @@ product=ぽるしぇ&amount=100
 ```
 
 http経由で実行してみる
+
+```bash
+sudo apt install curl
+```
 
 ```bash
 curl http://localhost/cgi-bin/test.rb?product=ぽるしぇ&amount=100
