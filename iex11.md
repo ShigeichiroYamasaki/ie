@@ -137,6 +137,13 @@ cd /usr/lib/cgi-bin/
 
 Rubyで作成する
 
+#### Ruby のインストール
+
+```bash
+sudo apt install ruby
+```
+
+
 ```bash
 sudo nano test.rb
 ```
