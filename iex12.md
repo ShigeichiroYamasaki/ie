@@ -1,5 +1,5 @@
 # インターネット工学演習 12
-## WEBサーバの構築2
+## ネットワーク性能測定
 
 ## レポートURL
 
@@ -129,19 +129,15 @@ iperf3 -s
 iperf3 -c 
 ```
 
-* Latency
-	* コンピューターにデータ転送などを要求し、その結果が送信されるまでにかかる時間
-* Jitter(ジッター)
-	* (伝送遅延時間)の変動値
-* RTT（ラウンドトリップタイム）
-	* 往復時間のこと
-* Packet Loss(パケットロス)
-	* 通信経路上でデータパケットが喪失し、宛先まで届かないこと
-
-
 [https://sourceforge.net/speedtest/](https://sourceforge.net/speedtest/)
 
 ## munin
 
+自分のmunin サイトを確認
+
+* 1時間程度経過した後
+
+```
+http://
 
 
