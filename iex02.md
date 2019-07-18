@@ -1,5 +1,11 @@
 # インターネット工学演習 02
 
+
+## レポートURL
+
+[https://forms.gle/Yd2zeaDKjwqNwzFs8](https://forms.gle/Yd2zeaDKjwqNwzFs8)
+
+
 ## 現在のディレクトリのパスの確認
 
 ```

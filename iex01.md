@@ -1,5 +1,15 @@
 # インターネット工学演習 01
 
+
+[https://drive.google.com/drive/folders/1qjXjiVEilOj_YUEvXm_Io7T0ggwqVMqa?hl=ja](https://drive.google.com/drive/folders/1qjXjiVEilOj_YUEvXm_Io7T0ggwqVMqa?hl=ja)
+
+
+## レポートURL
+
+
+
+[https://forms.gle/XHuRRGuhvWJRxFcQ7](https://forms.gle/XHuRRGuhvWJRxFcQ7)
+
 ## ubuntu18.04 LTS をインストール
 
 * LANケーブルを接続
