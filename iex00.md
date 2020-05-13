@@ -54,14 +54,43 @@ AWS Educateは、誰でも自由に参加できるクラウド学習プログラ
 
 * 右上のオレンジ色のボタン「Sign In to the console」をクリック
 
-* ルートユーザ
+*  IAM ユーザー
 
 パスワード
 
-## AWS マネジメントコンソール
+## ソリューションの構築
 
-* ソリューションの構築
-* 仮想マシンを起動する
+### 仮想マシンを起動する
 
-# EC2インスタンスとIPアドレス
+#### ステップ 1: Amazon マシンイメージ (AMI)
 
+* 無料利用枠のもののみ
+
+* Ubuntu Server 18.04 LTS (HVM), SSD Volume Type - ami-0278fe6949f6b1a06 (64 ビット x86) / ami-039202b3bbbe96f2d (64 ビット Arm)
+
+「選択」
+
+#### ステップ 2: インスタンスタイプの選択
+
+「確認と作成」
+
+#### ステップ 7: インスタンス作成の確認
+
+## ssh で接続する１
+
+[https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/ec2-instance-connect-set-up.html#ec2-instance-connect-setup-security-group](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/ec2-instance-connect-set-up.html#ec2-instance-connect-setup-security-group)
+
+鍵の名前などが異なる
+
+```bash
+ssh -i "yamasaki.pem" ubuntu@ec2-13-231-108-8.ap-northeast-1.compute.amazonaws.com
+```
+
+```bash
+ sudo apt-get update
+ ```
+ 
+ ```bash
+ sudo apt-get install ec2-instance-connect
+ ```
+ 
