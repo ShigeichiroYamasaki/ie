@@ -1,4 +1,5 @@
 # インターネット工学演習 01
+## 導入講義、Linuxのインストールと起動のしくみ
 
 
 [https://drive.google.com/drive/folders/1qjXjiVEilOj_YUEvXm_Io7T0ggwqVMqa?hl=ja](https://drive.google.com/drive/folders/1qjXjiVEilOj_YUEvXm_Io7T0ggwqVMqa?hl=ja)
