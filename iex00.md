@@ -58,13 +58,15 @@ AWS Educateは、誰でも自由に参加できるクラウド学習プログラ
 
 パスワード
 
-## ソリューションの構築
+## 「ソリューションの構築」をクリック
 
 ### 仮想マシンを起動する
 
 #### ステップ 1: Amazon マシンイメージ (AMI)
 
-* 無料利用枠のもののみ
+* 無料利用枠のもののみというチェックボックスをチェックしておく
+
+##### 選ぶOSは Ubuntu Server 18.04 LTS
 
 * Ubuntu Server 18.04 LTS (HVM), SSD Volume Type - ami-0278fe6949f6b1a06 (64 ビット x86) / ami-039202b3bbbe96f2d (64 ビット Arm)
 
@@ -76,21 +78,34 @@ AWS Educateは、誰でも自由に参加できるクラウド学習プログラ
 
 #### ステップ 7: インスタンス作成の確認
 
-## ssh で接続する１
+## 接続する
 
-[https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/ec2-instance-connect-set-up.html#ec2-instance-connect-setup-security-group](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/ec2-instance-connect-set-up.html#ec2-instance-connect-setup-security-group)
+### Windows の場合（Tera TermかPuTTY を準備する）
+
+#### [log4ketancho氏のブログ](https://www.ketancho.net/entry/2018/09/06/060951)
+
+### Macの場合　（ユーティリティのターミナルを利用）
+
+#### [@nakm氏のブログ](https://qiita.com/nakm/items/695e41d8e71d0d281ac4)
+
+### sshクライアントではなくブラウザから接続する方法
+
+一度、putty や ターミナルなどでssh 接続し、セットアップ作業が必要
+
+[EC2 Instance Connect のセットアップ](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/ec2-instance-connect-set-up.html#ec2-instance-connect-setup-security-group)
 
 鍵の名前などが異なる
 
 ```bash
 ssh -i "yamasaki.pem" ubuntu@ec2-13-231-108-8.ap-northeast-1.compute.amazonaws.com
+
 ```
 
 ```bash
  sudo apt-get update
- ```
+```
  
- ```bash
+```bash
  sudo apt-get install ec2-instance-connect
- ```
+```
  
