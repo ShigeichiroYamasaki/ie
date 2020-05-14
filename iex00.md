@@ -94,18 +94,26 @@ AWS Educateは、誰でも自由に参加できるクラウド学習プログラ
 
 [EC2 Instance Connect のセットアップ](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/ec2-instance-connect-set-up.html#ec2-instance-connect-setup-security-group)
 
-鍵の名前などが異なる
+鍵の名前などは自分のものに修正してください
 
 ```bash
 ssh -i "yamasaki.pem" ubuntu@ec2-13-231-108-8.ap-northeast-1.compute.amazonaws.com
 
 ```
 
+ssh ログイン後、以下のようなコマンドで設定すると　EC2 Instance Connect (ブラウザベースの SSH 接続) 　で接続できるようになります。
+
 ```bash
  sudo apt-get update
-```
- 
-```bash
+
  sudo apt-get install ec2-instance-connect
 ```
+ 
+ ### EC2 Instance Connect (ブラウザベースの SSH 接続) 　で接続
+ 
+ * ブラウザは、chrome を使う
+
+*  インスタンスを選択して、「接続」ボタンをクリック
+*  「インスタンスに接続」ダイアローグで、EC2 Instance Connect (ブラウザベースの SSH 接続) を選択して接続する
+*  ブラウザ上にターミナルウィンドウが出現すれば成功
  
