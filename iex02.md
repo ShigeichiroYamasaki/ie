@@ -1,9 +1,11 @@
 # インターネット工学演習 02
 ## Linuxの設定と基本操作
 
-## レポートURL
+### sshでサーバに接続して以下の操作を行う
 
-[https://forms.gle/Yd2zeaDKjwqNwzFs8](https://forms.gle/Yd2zeaDKjwqNwzFs8)
+* WindowsマシンのPutty で接続
+* Mac のターミナルで接続
+* ubuntuなどのLinux のターミナルで接続l
 
 
 ## 現在のディレクトリのパスの確認
@@ -301,8 +303,4 @@ IP アドレスを確認し、隣同士でIPアドレスを教える
 ssh kindai@192.168.1.X
 ```
 
-# 提出レポートURL
-
-第２回レポート
-[https://forms.gle/dTk3SZ38G9Y6eZdq9](https://forms.gle/dTk3SZ38G9Y6eZdq9)
 

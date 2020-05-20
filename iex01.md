@@ -1,15 +1,9 @@
 # インターネット工学演習 01
-## 導入講義、Linuxのインストールと起動のしくみ
+# 導入講義　Linuxのインストール
 
+## AWS Educate のユーザアカウント登録
 
-[https://drive.google.com/drive/folders/1qjXjiVEilOj_YUEvXm_Io7T0ggwqVMqa?hl=ja](https://drive.google.com/drive/folders/1qjXjiVEilOj_YUEvXm_Io7T0ggwqVMqa?hl=ja)
-
-
-## レポートURL
-
-
-
-[https://forms.gle/XHuRRGuhvWJRxFcQ7](https://forms.gle/XHuRRGuhvWJRxFcQ7)
+[AWS Educate の使い方](https://github.com/ShigeichiroYamasaki/ie/blob/master/iex00.md)
 
 ## ubuntu18.04 LTS をインストール
 
