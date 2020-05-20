@@ -1,9 +1,7 @@
 # インターネット工学演習 04
 ## ルータの基本
 
-## レポートURL
 
-[https://forms.gle/JMgRonQWRdQkGSL99](https://forms.gle/JMgRonQWRdQkGSL99)
 
 ## ルータの配布
 
@@ -42,9 +40,5 @@ LAN側のIPアドレスを変更してみる
 ### ping で確認
 
 
-
-## レポートURL
-
-[https://forms.gle/k7G2iVF89pmkHge88](https://forms.gle/k7G2iVF89pmkHge88)
 
 
