@@ -10,8 +10,21 @@ $ ip addr
 $ ifconfig
 ```
 
-まわりの人のIPアドレス関係情報の確認する
+### 自分のIPアドレス関係情報の確認する
 
+* Windows Powershell の場合
+
+```
+ipconfig
+```
+
+* Mac ターミナルの場合
+
+```
+ifconfig
+```
+
+* インターフェース名（有線、無線LAN、ローカルループバック）
 * ipアドレス
 * サブネットマスク
 * ブロードキャストアドレス
@@ -20,13 +33,18 @@ $ ifconfig
 ## ルーティングテーブルの確認
 
 ```
-$ netstat -r
+$ ip r
 
-カーネルIP経路テーブル
-受信先サイト    ゲートウェイ    ネットマスク   フラグ Metric Ref 使用数 インタフェース
-default         _gateway        0.0.0.0         UG    100    0        0 enp3s0
-link-local      0.0.0.0         255.255.0.0     U     1000   0        0 enp3s0
-192.168.0.0     0.0.0.0         255.255.255.0   U     100    0        0 enp3s0
+default via 192.168.0.1 dev wlp0s20f3 proto static metric 600 
+169.254.0.0/16 dev wlp0s20f3 scope link metric 1000 
+192.168.0.0/27 dev wlp0s20f3 proto kernel scope link src 192.168.0.27 metric 600 
+192.168.0.32/27 dev eno1 proto kernel scope link src 192.168.0.36 metric 100 
+192.168.0.64/27 via 192.168.0.35 dev eno1 
+192.168.0.96/27 via 192.168.0.35 dev eno1 
+192.168.0.128/27 via 192.168.0.34 dev eno1 
+192.168.0.160/27 via 192.168.0.34 dev eno1 
+192.168.0.192/27 via 192.168.0.33 dev eno1 
+192.168.0.224/27 via 192.168.0.33 dev eno1 
 
 ```
 
@@ -46,13 +64,18 @@ $ arp
 確認したい相手のIPアドレスを知る
 
 ```
-$ ping 192.168.1.X
+R $ ping 192.168.0.35
 
-PING 192.168.0.18 (192.168.0.18): 56 data bytes
-64 bytes from 192.168.0.18: icmp_seq=0 ttl=64 time=7.093 ms
-64 bytes from 192.168.0.18: icmp_seq=1 ttl=64 time=7.443 ms
-64 bytes from 192.168.0.18: icmp_seq=2 ttl=64 time=6.654 ms
-64 bytes from 192.168.0.18: icmp_seq=3 ttl=64 time=6.111 ms
+PING 192.168.0.35 (192.168.0.35) 56(84) bytes of data.
+64 bytes from 192.168.0.35: icmp_seq=1 ttl=64 time=0.326 ms
+64 bytes from 192.168.0.35: icmp_seq=2 ttl=64 time=0.530 ms
+64 bytes from 192.168.0.35: icmp_seq=3 ttl=64 time=0.715 ms
+64 bytes from 192.168.0.35: icmp_seq=4 ttl=64 time=0.681 ms
+64 bytes from 192.168.0.35: icmp_seq=5 ttl=64 time=0.688 ms
+64 bytes from 192.168.0.35: icmp_seq=6 ttl=64 time=0.244 ms
+64 bytes from 192.168.0.35: icmp_seq=7 ttl=64 time=0.690 ms
+64 bytes from 192.168.0.35: icmp_seq=8 ttl=64 time=0.742 ms
+
 
 (コントロール ｃ) で終了する
 ```
@@ -63,7 +86,7 @@ PING 192.168.0.18 (192.168.0.18): 56 data bytes
 
 * GOOGLEのDNSサーバ  8.8.8.8
 * yahoo のサーバ www.yahoo.co.jp
-* 近畿大学産業理工学部のDNSサーバ １５７．１３．1.1
+* 近畿大学産業理工学部のDNSサーバ 157.13.1.1
 
 ### ping した後にARPテーブルを再確認する
 
@@ -99,6 +122,7 @@ traceroute to 8.8.8.8 (8.8.8.8), 64 hops max, 52 byte packets
 
 いろいろなサイトまでの経路を確認する
 
+* 演習ネットワークの全マシンのIPアドレス
 * yahoo のサーバ www.yahoo.co.jp
 * 近畿大学産業理工学部のDNSサーバ 157.13.61.1
 * 九工大のwebサーバ  www.kyutech.ac.jp
