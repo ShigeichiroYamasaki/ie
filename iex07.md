@@ -37,10 +37,24 @@ default via 192.168.0.65 dev eno1 proto static metric 105
 ```
 
 
+### 間違っているルーティングテーブルの削除
+
+ip route del コマンドの文法
+
+```bash
+sudo ip route del 宛先ネットワーク/サブネット via ゲートウェー dev インターフェース
+```
+
+例
+
+```bash
+sudo ip route del 192.168.0.112/28 via 192.168.0.98 dev enx8857ee65781e
+```
+
 
 ### 不足しているルーティングテーブルの登録
 
-ip route コマンドの文法
+ip route add コマンドの文法
 
 ```bash
 sudo ip route add 宛先ネットワーク/サブネット via ゲートウェー dev インターフェース
