@@ -92,14 +92,63 @@ sudo ip route add 192.168.0.176/28 via 192.168.0.65 dev eno1
 sudo ip route add 192.168.0.240/28 via 192.168.0.65 dev eno1
 ```
 
+## 動的ルーティングの実験
+
+RIPの実験
+
 ### quagga ripd のインストール
 
 ```bash
-sudo apt-get install -y quagga-ripd
+sudo apt install -y quagga
+sudo apt install -y quagga-doc
 
-sudo systemctl restart ripd.service 
+sudo cp /usr/share/doc/quagga-core/examples/zebra.conf.sample /etc/quagga/zebra.conf
+sudo cp /usr/share/doc/quagga-core/examples/ripd.conf.sample /etc/quagga/ripd.conf
 ```
 
+### ripd の起動
+
+```bash
+sudo service zebra start
+sudo service ripd start
+```
+
+
+### ルーティングテーブルの確認
+
+
+```bash
+ip r
+```
+
+### ネットワークの切り離し
+
+* 物理的に切り離す
+* ルーティングテーブルの自動的削除を確認する
+
+```bash
+ip r
+```
+
+
+### ネットワークの再接続
+
+* 物理的に接続する
+* ルーティングテーブルの自動的追加を確認
+
+```bash
+ip r
+```
+
+### ネットワークの接続変更
+
+* 物理的に接続を変更
+* IPアドレスなどの設定を変更
+* ルーティングテーブルの自動的修正を確認
+
+```bash
+ip r
+```
 
 ### グループ
 
