@@ -343,6 +343,16 @@ sudo service zebra restart
 sudo service ripd restart
 ```
 
+## tcpdump でRIPパケットを監視する
+
+★（sudo コマンドですが全員実行していいです）
+
+RIP はUDPでポート番号520
+
+```bash
+sudo tcpdump port 520 -v
+```
+
 ## ルーティングテーブルの変化を確認する
 
 * 30秒ごとに確認
