@@ -1,73 +1,93 @@
 # インターネット工学演習 11
 
-## WEBサーバの構築2
 
-## レポートURL
+# WEBサーバの構築
 
-[https://forms.gle/SrFbh1n7kTdGkUHU7
-](https://forms.gle/SrFbh1n7kTdGkUHU7
-)
+### sshサーバにログイン
 
-## aptによるapache2 のインストール
+power shell などで ssh コマンド
 
-```bash
-sudo apt install apache2
+```
+ssh ユーザID@106.157.214.199
 ```
 
-## apach2 のドキュメントルート
+
+### webサーバマシンにssh ログイン
+
+#### R マシンがwebサーバ
+
+```bash
+192.168.0.27
+```
+
+## 自分のhtml用ディレクトリを作成
 
 ```bash
 cd /var/www/html
+
+sudo mkdir ディレクトリ名（自分の学籍番号にしてください）
+
+sudo chown 自分のアカウント:自分のアカウント ディレクトリ名
+
+cd ディレクトリ名
 ```
 
-### index.htmlを名称変更
+実行例
 
 ```bash
-sudo mv index.html index.homl.org
+cd /var/www/html
+
+sudo mkdir 18111400000（自分の学籍番号)
+
+sudo chown 18111400000:18111400000 18111400000 （自分の学籍番号)
+
+cd 18111400000 （自分の学籍番号)
 ```
 
-## index.htmlを作成する
+## 自分のページの作成
 
 ```bash
-sudo nano index.html
+nano index.html
 ```
 
-### 作成するHTML
 
-自分の名前のページを作成する
+## HTML
 
 ```html
+<meta charset="UTF-8">
 <html>
-	<head>
-		<meta charset="utf-8"/>
-	</head>
-	<body>
-		<h1>山崎のページ</h1>
-	</body>
+<head>
+</head>
+<body>
+<h1>自分の名前</h1>
+
+</body>
 </html>
+
 ```
 
-### 自分のページにアクセスする
+## ブラウザでURLでアクセスする
 
-URL
+```
+http://106.157.214.199/(自分の学籍番号)/index.html
+```
 
-	http://localhost/
-
-### 隣の人のページを見る
-
-各自のIPアドレスを知る
-
-	http://IPアドレス/
+### 例
 	
+```
+http://106.157.214.199/18111400000/index.html
+```
+
 ## form 文を含むページ
 
 自分のページを修正する
 
 ```bash
-cd /var/www/html
+cd /var/www/html/(自分の学籍番号)/
 sudo nano index.html
 ```
 
+(自分の学籍番号)/
 
 ```html
 <html>
@@ -76,7 +96,7 @@ sudo nano index.html
 	</head>
 	<body>
 		<h1>あまぞん</h1>
-		<form method='GET' action='cgi-bin/test.rb'>
+		<form method='GET' action='cgi-bin/(自分の学籍番号)/test.rb'>
 		<p>商品</p>
 		<input type='text' name='product'>
 		<p>数量</p>
@@ -131,6 +151,8 @@ sudo systemctl restart apache2
 
 ```bash
 cd /usr/lib/cgi-bin/
+mkdir (自分の学籍番号)/
+cd (自分の学籍番号)/
 ```
 
 ### CGIスクリプトの作成
