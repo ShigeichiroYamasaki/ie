@@ -37,11 +37,11 @@ cd ディレクトリ名
 ```bash
 cd /var/www/html
 
-sudo mkdir 18111400000（自分の学籍番号)
+sudo mkdir（自分の学籍番号または名前)
 
-sudo chown 18111400000:18111400000 18111400000 （自分の学籍番号)
+sudo chown ユーザID:ユーザID 18111400000 （自分の学籍番号または名前)
 
-cd 18111400000 （自分の学籍番号)
+cd（自分の学籍番号または名前)
 ```
 
 ## 自分のページの作成
@@ -90,20 +90,21 @@ sudo nano index.html
 (自分の学籍番号)/
 
 ```html
+<meta charset="UTF-8">
 <html>
-	<head>
-		<meta charset="utf-8"/>
-	</head>
-	<body>
-		<h1>あまぞん</h1>
-		<form method='GET' action='cgi-bin/(自分の学籍番号)/test.rb'>
-		<p>商品</p>
-		<input type='text' name='product'>
-		<p>数量</p>
-		<input type='text' name='amount'>
-		<p>
-		<input type='submit' name='注文'>
-		</form>
+ <head>
+ </head>
+ <body>
+  <h1>あまぞん</h1>
+  <form method='GET' action='/cgi-bin/(自分の学籍番号)/test.rb'>
+    <p>商品</p>
+    <input type='text' name='product'>
+    <p>数量</p>
+    <input type='text' name='amount'>
+    </p><p>
+    <input type='submit' value='注文'>
+    </p>
+  </form>
 	</body>
 </html>
 ```
@@ -151,23 +152,19 @@ sudo systemctl restart apache2
 
 ```bash
 cd /usr/lib/cgi-bin/
-mkdir (自分の学籍番号)/
-cd (自分の学籍番号)/
+
+sudo mkdir（自分の学籍番号または名前)
+
+sudo chown ユーザID:ユーザID （自分の学籍番号または名前)
+
+cd （自分の学籍番号または名前)
 ```
 
 ### CGIスクリプトの作成
 
-Rubyで作成する
-
-#### Ruby のインストール
 
 ```bash
-sudo apt install ruby
-```
-
-
-```bash
-sudo nano test.rb
+nano test.rb
 ```
 
 1行目のは#! は「シェバング」と呼ばれるもので、スクリプトを実行する言語処理系を呼び出すためのもの
@@ -178,8 +175,11 @@ require 'cgi'
 cgi=CGI.new
 
 puts "Content-type: text/html"
+
 puts "\n\n"
-puts "<html>
+
+puts "
+<html>
 <head>
 <meta charset='utf-8'/>
 </head>
