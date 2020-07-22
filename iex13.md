@@ -1,12 +1,6 @@
 # インターネット工学演習 13
 ## RESTful Webアプリケーション
 
-## レポートURL
-
-[https://forms.gle/qKeeYhiEmcbpP4EZ9
-](https://forms.gle/qKeeYhiEmcbpP4EZ9
-)
-
 ## Railsインストール
 
 ### 事前にOS をupdate, upgradeしておく
@@ -17,11 +11,17 @@ sudo apt upgrade
 ```
 
 ```bash
-sudo apt install -y ruby
-sudo apt install -y sqlite3
-sudo apt install libsqlite3-dev
-sudo apt install -y nodejs
-sudo apt install -y build-essential liblzma-dev patch ruby-dev zlib1g-dev
+sudo apt install autoconf bison build-essential libssl-dev libyaml-dev libreadline-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev sqlite3 libsqlite3-dev
+sudo apt install -y nodejs npm
+sudo npm install n -g
+sudo n stable
+sudo apt purge -y nodejs npm
+exec $SHELL -l
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+sudo apt-get update
+sudo apt-get install yarn
+
 sudo gem install sqlite3
 sudo gem install rails
 ```
@@ -32,13 +32,19 @@ sudo gem install rails
 mkdir rails
 cd rails
 rails new kindai
+
+## パスワードを入れる
+
 cd kindai
 
 bundle install
 
 rails g scaffold Blog title date:datetime text:text picture:string
 rake db:migrate
-rails s -b 0.0.0.0
+rails webpacker:install
+
+## ポート番号を指定して起動
+rails s -b 0.0.0.0 -p ボート番号
 ```
 
 ###  トップページにアクセス
@@ -48,7 +54,7 @@ rails s -b 0.0.0.0
 URLにアクセス
 
 ```
- http://<IPアドレス>:3000/blogs
+ http://106.157.214.199:ポート番号/blogs
 ```
 
 * New Blog をクリック
