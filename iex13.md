@@ -91,34 +91,34 @@ cd kindai
  
  この行の前に次の行を追加する
  
- ```html
+```html
  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
- ```
+```
  
  さらに
  
- ```html
+```html
    <body>
     <%= yield %>
   </body>
- ```
+```
  
  の部分を以下のように書き換えます
  
- ```html
+```html
    <body>
    <div class="container">
     <%= yield %>
     </div>
   </body>
- ```
+```
  
  #### ブラウザでデザインの変化を見てみる
  
  #### さらに</body>　の直前にナビゲーションを追加する
  
- ```html
+```html
  <footer>
   <div class="container">
 Kindai 2019
@@ -127,25 +127,25 @@ Kindai 2019
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-</body>　
- ```
+</body>
+											
+```
  #### CSSを修正
  
- ```bash
+```bash
 nano app/assets/stylesheets/application.css
- ```
+```
  
  ファイルの最後に以下を追加
  
- ```css
+```css
 body { padding-top: 100px; }
 footer { margin-top: 100px; }
 table, td, th { vertical-align: middle; border: none; }
 th { border-bottom: 1px solid #DDD; }
- ```
+```
  
- 
- ### 写真アップロード機能を追加
+### 写真アップロード機能を追加
  
  rails root の Gemfile を修正
  
