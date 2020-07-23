@@ -26,7 +26,6 @@ ssh ユーザID@106.157.214.199
 cd /var/www/html
 
 sudo mkdir ディレクトリ名（自分の学籍番号にしてください）
-
 sudo chown 自分のアカウント:自分のアカウント ディレクトリ名
 
 cd ディレクトリ名
@@ -37,11 +36,10 @@ cd ディレクトリ名
 ```bash
 cd /var/www/html
 
-sudo mkdir（自分の学籍番号または名前)
+sudo mkdir 18111400000
+sudo chown  s18111400000r:s18111400000r 18111400000 
 
-sudo chown ユーザID:ユーザID 18111400000 （自分の学籍番号または名前)
-
-cd（自分の学籍番号または名前)
+cd 18111400000
 ```
 
 ## 自分のページの作成
@@ -148,7 +146,7 @@ sudo nano /etc/apache2/conf-available/serve-cgi-bin.conf
 sudo systemctl restart apache2
 ```
 
-### スクリプトエイリアス用ディレクトリへ移動
+### スクリプトエイリアス用ディレクトリへ移動してディレクトリの作成所有権変更
 
 ```bash
 cd /usr/lib/cgi-bin/
@@ -159,6 +157,18 @@ sudo chown ユーザID:ユーザID （自分の学籍番号または名前)
 
 cd （自分の学籍番号または名前)
 ```
+
+実行例
+
+```bash
+cd /usr/lib/cgi-bin/
+
+sudo mkdir 18111400000
+sudo chown  s18111400000r:s18111400000r 18111400000 
+
+cd 18111400000
+```
+
 
 ### CGIスクリプトの作成
 

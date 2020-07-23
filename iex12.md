@@ -6,97 +6,6 @@
 ssh ユーザID＠106.157.214.199
 ```
 
-### スクリプトエイリアス用ディレクトリへ移動
-
-```bash
-cd /usr/lib/cgi-bin/
-
-sudo mkdir（自分の学籍番号または名前)
-
-sudo chown ユーザID:ユーザID （自分の学籍番号または名前)
-
-cd （自分の学籍番号または名前)
-```
-
-### CGIスクリプトの作成
-
-
-```bash
-nano test.rb
-```
-
-1行目のは#! は「シェバング」と呼ばれるもので、スクリプトを実行する言語処理系を呼び出すためのもの
-
-```ruby
-#!/usr/bin/env ruby
-require 'cgi'
-cgi=CGI.new
-
-puts "Content-type: text/html"
-
-puts "\n\n"
-
-puts "
-<html>
-<head>
-<meta charset='utf-8'/>
-</head>
-<body>
-<h1>お買い上げありがとうございます</h1>
-<p>明日の８時に#{cgi['product']}を#{cgi['amount']}個お届けします</p>
-</body>
-</html>
-"
-```
-
-### スクリプトに実行権限を与える
-
-```bash
-sudo chmod a+x test.rb
-```
-
-### スクリプトのテスト（デバッグ）
-
-CGIではなくコマンドとして実行してみる
-
-```bash
-./test.rb
-```
-
-入力待ち状態になれば成功
-
-試しに入力も入れてみる
-
-入力の終了は、^d (コントロールキー＋ｄ)
-
-```
-product=ぽるしぇ&amount=100
-```
-
-その結果、以下のようなHTMLが出力されれば成功
-
-```html
-<html>
-<head>
-<meta charset='utf-8'/>
-</head>
-<body>
-<h1>お買い上げありがとうございます</h1>
-<p>明日の８時にぽるしぇを100個お届けします</p>
-</body>
-</html>
-```
-
-http経由で実行してみる
-
-```bash
-sudo apt install curl
-```
-
-```bash
-curl http://localhost/cgi-bin/test.rb?product=ぽるしぇ&amount=100
-```
-
 ### グループ
 
 ★リーダが欠席の場合：（１）先頭から循環順序で決定（２）２回以上している場合は次の人に
@@ -205,32 +114,6 @@ L 1811140064
 | :--- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
 | 9班  |10班 | 1班  | 2班  | 3班  | 4班  | 5班  | 6班  | 7班  | 8班 |
 
-## ポートマッピング
-
-* 192.168.0.27	:8001
-* 192.168.0.35	:8002
-* 192.168.0.66	:8003
-* 192.168.0.227	:8004
-* 192.168.0.34	:8005
-* 192.168.0.130	:8006
-* 192.168.0.162	:8007
-* 192.168.0.33	:8008
-* 192.168.0.194	:8009
-* 192.168.0.226	:8010
-
-
-## apache2 のポートの変更
-
-```bash
-sudo nano /etc/apache2/ports.conf
-```
-
-以下の例（8001）のように 80 以外のポート番号に変更する
-
-```
-Listen: 8001 
-```
-
 ## ネットワーク構成
 
 ```
@@ -288,6 +171,273 @@ Listen: 8001
                     -+-------+------------------------ 192.168.0.240/28
                            [ C3]
 
+```
+
+
+## 先週にやったことの確認
+
+
+### webサーバマシンにssh ログイン
+
+#### R マシンがwebサーバ
+
+```bash
+ssh ユーザID@192.168.0.27
+```
+
+## 自分のhtml用ディレクトリを作成
+
+```bash
+cd /var/www/html
+
+sudo mkdir ディレクトリ名（自分の学籍番号にしてください）
+sudo chown 自分のアカウント:自分のアカウント ディレクトリ名
+
+cd ディレクトリ名
+```
+
+実行例
+
+```bash
+cd /var/www/html
+
+sudo mkdir 18111400000
+sudo chown  s18111400000r:s18111400000r 18111400000 
+
+cd 18111400000
+```
+
+### 自分のページの作成
+
+```bash
+nano index.html
+```
+
+
+## HTML
+
+```html
+<meta charset="UTF-8">
+<html>
+<head>
+</head>
+<body>
+<h1>自分の名前</h1>
+
+</body>
+</html>
+
+```
+
+## ブラウザでURLでアクセスする
+
+```
+http://106.157.214.199/(自分の学籍番号)/index.html
+```
+
+### 例
+	
+```
+http://106.157.214.199/18111400000/index.html
+```
+
+## form 文を含むページ
+
+自分のページを修正する
+
+```bash
+cd /var/www/html/(自分の学籍番号)/
+sudo nano index.html
+```
+
+(自分の学籍番号)/
+
+```html
+<meta charset="UTF-8">
+<html>
+ <head>
+ </head>
+ <body>
+  <h1>あまぞん</h1>
+  <form method='GET' action='/cgi-bin/(自分の学籍番号)/test.rb'>
+    <p>商品</p>
+    <input type='text' name='product'>
+    <p>数量</p>
+    <input type='text' name='amount'>
+    </p><p>
+    <input type='submit' value='注文'>
+    </p>
+  </form>
+	</body>
+</html>
+```
+
+## CGI プログラムを動かす
+
+### apache2にcgiモジュールを組み込む
+
+```bash
+sudo a2enmod cgi
+```
+
+### apache2 に.rb ファイルをCGIとして実行できるように設定する
+
+#### apache2 の設定ファイルのディレクトリ
+
+```bash
+cd /etc/apache2/conf-available
+```
+
+#### serve-cgi-bin.conf を編集
+
+```bash
+sudo nano /etc/apache2/conf-available/serve-cgi-bin.conf 
+```
+
+```
+...
+                <Directory "/usr/lib/cgi-bin">
+                        Options +ExecCGI 
+                        AddHandler cgi-script .cgi .rb
+                        AllowOverride None
+                        Require all granted
+                </Directory>
+...                
+```
+
+-----------------------
+
+## 今週
+
+
+### スクリプトエイリアス用ディレクトリへ移動してディレクトリの作成所有権変更
+
+```bash
+cd /usr/lib/cgi-bin/
+
+sudo mkdir（自分の学籍番号または名前)
+
+sudo chown ユーザID:ユーザID （自分の学籍番号または名前)
+
+cd （自分の学籍番号または名前)
+```
+
+実行例
+
+```bash
+cd /usr/lib/cgi-bin/
+
+sudo mkdir 18111400000
+sudo chown  s18111400000r:s18111400000r 18111400000 
+
+cd 18111400000
+```
+
+
+### CGIスクリプトの作成
+
+
+```bash
+nano test.rb
+```
+
+1行目のは#! は「シェバング」と呼ばれるもので、スクリプトを実行する言語処理系を呼び出すためのもの
+
+```ruby
+#!/usr/bin/env ruby
+require 'cgi'
+cgi=CGI.new
+
+puts "Content-type: text/html"
+
+puts "\n\n"
+
+puts "
+<html>
+<head>
+<meta charset='utf-8'/>
+</head>
+<body>
+<h1>お買い上げありがとうございます</h1>
+<p>明日の８時に#{cgi['product']}を#{cgi['amount']}個お届けします</p>
+</body>
+</html>
+"
+```
+
+### スクリプトに実行権限を与える
+
+```bash
+sudo chmod a+x test.rb
+```
+
+### スクリプトのテスト（デバッグ）
+
+CGIではなくコマンドとして実行してみる
+
+```bash
+./test.rb
+```
+
+入力待ち状態になれば成功
+
+試しに入力も入れてみる
+
+入力の終了は、^d (コントロールキー＋ｄ)
+
+```
+product=ぽるしぇ&amount=100
+```
+
+その結果、以下のようなHTMLが出力されれば成功
+
+```html
+<html>
+<head>
+<meta charset='utf-8'/>
+</head>
+<body>
+<h1>お買い上げありがとうございます</h1>
+<p>明日の８時にぽるしぇを100個お届けします</p>
+</body>
+</html>
+```
+
+http経由で実行してみる
+
+```bash
+sudo apt install curl
+```
+
+```bash
+curl http://localhost/cgi-bin/test.rb?product=ぽるしぇ&amount=100
+```
+
+
+## ポートマッピング
+
+* 192.168.0.27	:8001
+* 192.168.0.35	:8002
+* 192.168.0.66	:8003
+* 192.168.0.227	:8004
+* 192.168.0.34	:8005
+* 192.168.0.130	:8006
+* 192.168.0.162	:8007
+* 192.168.0.33	:8008
+* 192.168.0.194	:8009
+* 192.168.0.226	:8010
+
+
+## apache2 のポートの変更
+
+```bash
+sudo nano /etc/apache2/ports.conf
+```
+
+以下の例（8001）のように 80 以外のポート番号に変更する
+
+```
+Listen: 8001 
 ```
 
 
