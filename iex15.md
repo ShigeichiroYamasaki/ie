@@ -1,213 +1,73 @@
-# インターネット工学演習 13
-## RESTful Webアプリケーション
+# インターネット工学演習 15
+## IPv6
 
-## レポートURL
-
-[https://forms.gle/qKeeYhiEmcbpP4EZ9
-](https://forms.gle/qKeeYhiEmcbpP4EZ9
-)
-
-## Railsインストール
-
-### 事前にOS をupdate, upgradeしておく
-
-```bash
-sudo apt update
-sudo apt upgrade
-```
-
-```bash
-sudo apt install -y ruby
-sudo apt install -y sqlite3
-sudo apt install libsqlite3-dev
-sudo apt install -y nodejs
-sudo apt install -y build-essential liblzma-dev patch ruby-dev zlib1g-dev
-sudo gem install sqlite3
-sudo gem install rails
-```
-
-## 最初のRailsアプリの作成
-
-```bash
-mkdir rails
-cd rails
-rails new kindai
-cd kindai
-
-bundle install
-
-rails g scaffold Blog title date:datetime text:text picture:string
-rake db:migrate
-rails s -b 0.0.0.0
-```
-
-###  トップページにアクセス
-
-* IPアドレスをしらべる
-
-URLにアクセス
+## ipv6アドレスの確認
 
 ```
- http://<IPアドレス>:3000/blogs
+ip a
 ```
 
-* New Blog をクリック
-* 情報を入れる
-* ページから情報を入れる
-* create blog ボタン
-* back
-
-この手順でいくつか記事を作成／削除する
-
-### 新たなターミナルでRailsのディレクトリにアクセスする
-
-* rails ルートディレクトリ
-
-```bash
-cd ~
-cd rails
-cd kindai
 ```
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 1c:69:7a:04:ea:9f brd ff:ff:ff:ff:ff:ff
+    inet 192.168.0.29/27 brd 192.168.0.31 scope global noprefixroute eno1
+       valid_lft forever preferred_lft forever
+    inet6 240f:ca:425:1:65d2:b6ef:e501:6e79/64 scope global temporary dynamic 
+       valid_lft 289sec preferred_lft 289sec
+    inet6 240f:ca:425:1:40d2:5e8e:9f09:82ab/64 scope global temporary deprecated dynamic 
+       valid_lft 289sec preferred_lft 0sec
+    inet6 240f:ca:425:1:2d7d:3f2b:4188:6688/64 scope global temporary deprecated dynamic 
+       valid_lft 289sec preferred_lft 0sec
+    inet6 240f:ca:425:1:1c8e:6cf3:87da:1b0b/64 scope global temporary deprecated dynamic 
+       valid_lft 289sec preferred_lft 0sec
+    inet6 240f:ca:425:1:6807:8227:1fdd:4a9f/64 scope global temporary deprecated dynamic 
+       valid_lft 289sec preferred_lft 0sec
+    inet6 240f:ca:425:1:409d:3b67:5927:5e62/64 scope global temporary deprecated dynamic 
+       valid_lft 289sec preferred_lft 0sec
+    inet6 240f:ca:425:1:6126:d02d:257f:45e2/64 scope global temporary deprecated dynamic 
+       valid_lft 289sec preferred_lft 0sec
+    inet6 240f:ca:425:1::4/128 scope global dynamic noprefixroute 
+       valid_lft 3571sec preferred_lft 1771sec
+    inet6 240f:ca:425:1:db2a:a383:b66d:ccc9/64 scope global dynamic mngtmpaddr noprefixroute 
+       valid_lft 289sec preferred_lft 289sec
+    inet6 fe80::96ec:bc43:b8b:d8e3/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+3: wlp0s20f3: <BROADCAST,MULTICAST> mtu 1500 qdisc noqueue state DOWN group default qlen 1000
+    link/ether 98:2c:bc:e9:0b:5b brd ff:ff:ff:ff:ff:ff
+
+```
+
+### グローバルユニキャストアドレスの確認
+
+
+ inet6 240f:ca:425:1:65d2:b6ef:e501:6e79/64 scope global temporary dynamic 
  
-###  Bootstrap でデザインを追加
- 
- * application.html.erbを編集
+### DNS でIPv6アドレスを確認
 
- ```bash
- nano app/views/layouts/application.html.erb
+
+ 
+ 
+### ping6
+ 
+ ```
+ ping6 240f:ca:425:1:65d2:b6ef:e501:6e79
  ```
  
- 以下の行を見つける
+### netstat
  
- ```heml
- <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
  ```
- 
- この行の前に次の行を追加する
- 
- ```html
- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
- ```
- 
- さらに
- 
- ```html
-   <body>
-    <%= yield %>
-  </body>
- ```
- 
- の部分を以下のように書き換えます
- 
- ```html
-   <body>
-   <div class="container">
-    <%= yield %>
-    </div>
-  </body>
- ```
- 
- #### ブラウザでデザインの変化を見てみる
- 
- #### さらに</body>　の直前にナビゲーションを追加する
- 
- ```html
- <footer>
-  <div class="container">
-Kindai 2019
-  </div>
-</footer>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-</body>　
- ```
- #### CSSを修正
- 
- ```bash
-nano app/assets/stylesheets/application.css
- ```
- 
- ファイルの最後に以下を追加
- 
- ```css
-body { padding-top: 100px; }
-footer { margin-top: 100px; }
-table, td, th { vertical-align: middle; border: none; }
-th { border-bottom: 1px solid #DDD; }
- ```
- 
- 
- ### 写真アップロード機能を追加
- 
- rails root の Gemfile を修正
- 
- ```bash
- nano Gemfile
+ netstat -rnA inet6
  ```
 
-次の一行を追加
+### AS``
 
-```ruby
-gem 'carrierwave'
 ```
-
- bundler を実行
+curl http://api.db-ip.com/v2/free/240f:ca:425:1:985f:f0eb:24c8:aa1e
+``` 
  
- ```bash
- bundle
- ```
- 
- ### 写真アップローダのジェネレータの実行
- 
- ```bash
- rails generate uploader Picture
- ```
-
-### モデルの修正
-
-```bash
-nano app/models/blog.rb
-```
-
-```ruby
-class Blog < ApplicationRecord
-mount_uploader :picture, PictureUploader
-end
-```
-
-### formの修正
-
-```bash
-nano app/views/blogs/_form.html.erb
-```
-
-修正する元
-
-```html
-<%= form.text_field :picture %>
-```
-
-修正した結果
-
-```html
-<%= form.file_field :picture %>
-```
-
-### ビューを修正
-
-```bash
-nano app/views/blogs/show.html.erb
-```
-修正部分
-
-```ruby
-<%= @blog.picture %>
-```
-
-修正結果
-
-```ruby
-<%= image_tag(@blog.picture_url, width: 600) if @blog.picture.present? %>
-```
