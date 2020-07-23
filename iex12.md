@@ -429,11 +429,11 @@ ssh ユーザID@IPアドレス
 
 ```bash
 sudo apt update
-sudo apt upgrade
+sudo apt -y upgrade
 ```
 
 ```bash
-sudo apt install autoconf bison build-essential libssl-dev libyaml-dev libreadline-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev sqlite3 libsqlite3-dev
+sudo apt install -y autoconf bison build-essential libssl-dev libyaml-dev libreadline-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev sqlite3 libsqlite3-dev
 sudo apt install -y nodejs npm
 sudo npm install n -g
 sudo n stable
@@ -441,9 +441,12 @@ sudo apt purge -y nodejs npm
 exec $SHELL -l
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-sudo apt-get update
-sudo apt-get install yarn
+sudo apt update
+sudo apt install -y yarn
+sudo apt install -y ruby ruby-dev
+sudo apt install -y ruby-bundler
 
+sudo gem install nokogiri
 sudo gem install sqlite3
 sudo gem install rails
 ```
@@ -453,6 +456,7 @@ sudo gem install rails
 ```bash
 mkdir rails
 cd rails
+bundle install
 rails new kindai
 
 ## パスワードを入れる
@@ -469,6 +473,20 @@ rails webpacker:install
 rails s -b 0.0.0.0 -p ボート番号
 ```
 
+ポートマッピング
+
+* 192.168.0.27	:8001
+* 192.168.0.35	:8002
+* 192.168.0.66	:8003
+* 192.168.0.227	:8004
+* 192.168.0.34	:8005
+* 192.168.0.130	:8006
+* 192.168.0.162	:8007
+* 192.168.0.33	:8008
+* 192.168.0.194	:8009
+* 192.168.0.226	:8010
+
+
 ###  トップページにアクセス
 
 * IPアドレスをしらべる
@@ -479,11 +497,24 @@ URLにアクセス
  http://106.157.214.199:ポート番号/blogs
 ```
 
+## RESTful APIの確認
+
+### 新規作成
 * New Blog をクリック
-* 情報を入れる
-* ページから情報を入れる
+ * 情報を入れる
+ * ページから情報を入れる
 * create blog ボタン
 * back
+
+### （モデル名（英語）の複数形で一覧）
+
+### 参照 識別ID
+
+### 修正　識別ID
+
+### 削除　識別ID
+
+
 
 この手順でいくつか記事を作成／削除する
 
@@ -505,54 +536,37 @@ cd kindai
  nano app/views/layouts/application.html.erb
  ```
  
- 以下の行を見つける
+ 以下のように修正
  
  ```heml
- <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Kindai</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.$
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <div class="container">
+      <%= yield %>
+    </div>
+
+  <footer>
+  <div class="container">Kindai 2019 </div>
+  </footer>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </body>
+</html>
  ```
  
- この行の前に次の行を追加する
- 
-```html
- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
-```
- 
- さらに
- 
-```html
-   <body>
-    <%= yield %>
-  </body>
-```
- 
- の部分を以下のように書き換えます
- 
-```html
-   <body>
-   <div class="container">
-    <%= yield %>
-    </div>
-  </body>
-```
- 
- #### ブラウザでデザインの変化を見てみる
- 
- #### さらに</body>　の直前にナビゲーションを追加する
- 
-```html
- <footer>
-  <div class="container">
-Kindai 2019
-  </div>
-</footer>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-</body>
-											
-```
- #### CSSを修正
+  
+#### CSSを修正
  
 ```bash
 nano app/assets/stylesheets/application.css
@@ -584,7 +598,7 @@ gem 'carrierwave'
  bundler を実行
  
  ```bash
- bundle
+ bundle install
  ```
  
  ### 写真アップローダのジェネレータの実行
@@ -601,7 +615,7 @@ nano app/models/blog.rb
 
 ```ruby
 class Blog < ApplicationRecord
-mount_uploader :picture, PictureUploader
+  mount_uploader :picture, PictureUploader
 end
 ```
 
@@ -611,16 +625,48 @@ end
 nano app/views/blogs/_form.html.erb
 ```
 
-修正する元
-
-```html
-<%= form.text_field :picture %>
-```
-
 修正した結果
 
 ```html
-<%= form.file_field :picture %>
+<%= form_with(model: blog, local: true) do |form| %>
+  <% if blog.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(blog.errors.count, "error") %> prohibited this blog from being saved:</h2>
+
+      <ul>
+        <% blog.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :title %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div class="field">
+    <%= form.label :date %>
+    <%= form.datetime_select :date %>
+  </div>
+
+  <div class="field">
+    <%= form.label :text %>
+    <%= form.text_area :text %>
+  </div>
+
+  <div class="field">
+    <%= form.label :picture %>
+    <%= form.file_field :picture %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
+
+
 ```
 
 ### ビューを修正
@@ -639,3 +685,5 @@ nano app/views/blogs/show.html.erb
 ```ruby
 <%= image_tag(@blog.picture_url, width: 600) if @blog.picture.present? %>
 ```
+
+## RESTful APIの確認
