@@ -123,22 +123,6 @@ sudo a2enmod cgi
 cd /etc/apache2/conf-available
 ```
 
-#### serve-cgi-bin.conf を編集
-
-```bash
-sudo nano /etc/apache2/conf-available/serve-cgi-bin.conf 
-```
-
-```
-...
-                <Directory "/usr/lib/cgi-bin">
-                        Options +ExecCGI 
-                        AddHandler cgi-script .cgi .rb
-                        AllowOverride None
-                        Require all granted
-                </Directory>
-...                
-```
 
 ### apache2を再起動
 
