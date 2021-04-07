@@ -1,6 +1,25 @@
-# AWS Educate の使い方
 
-## AWS Educateとは？ 
+# インターネット工学演習 1
+
+## ssh login
+
+山崎の自宅マシンにログインする
+
+* windows power shell 
+* ubuntu terminal
+* MacOSX ターミナル
+
+
+```
+ssh ユーザ名@IP アドレス
+```
+
+### ssh コマンド
+
+## AWS Educate の使い方
+
+
+### AWS Educateとは？ 
 AWS Educateは、誰でも自由に参加できるクラウド学習プログラム。(14歳以上の学生もしくは教員が参加可能)
 
 
@@ -8,7 +27,7 @@ AWS Educateは、誰でも自由に参加できるクラウド学習プログラ
 * 登録にクレジットカードが不要です
 * インターネット工学演習は、Amazon のクラウドサービス Amazon EC2 を利用します
 
-## AWS Educate2つの方法
+### AWS Educate2つの方法
 
 *  自身のAWSアカウント(事前に作成してあるもの)を使用して、AWS Educateを使用する。
 登録には、クレジットカードを必要とするが、AWS サービスは自由に使用でき、AWS Educate のプロモーションクレジットがなくなってもアカウントのリソースは維持される。
