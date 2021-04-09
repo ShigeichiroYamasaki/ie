@@ -3,31 +3,31 @@
 
 ### sshでサーバに接続して以下の操作を行う
 
-* WindowsマシンのPutty で接続
-* Mac のターミナルで接続
-* ubuntuなどのLinux のターミナルで接続l
+* ubuntu のターミナルでssh 接続
+* windows のpower shell でssh 接続
+* Mac のターミナルで ssh 接続
 
+#### 以下，結果をメモしていく
 
 ## 現在のディレクトリのパスの確認
 
 ```
 $ pwd
-/home/yamasaki
-
 ```
 
+
 ## ディレクトリへの移動
+
 
 ```
 $ cd ~
 $ pwd
-/home/yamasaki
+
 $ cd /
 $ pwd
-/
+
 $ cd /usr/local
 $ pwd
-/usr/local
 
 ```
 
@@ -35,8 +35,7 @@ $ pwd
 
 ```
 $ ls
-ビデオ   ダウンロード テンプレート  デスクトップ  公開
-ピクチャ  ミュージック ドキュメント
+
 ```
 
 ###  ls コマンドに -l オプションをつけると詳細情報が表示される
@@ -55,32 +54,9 @@ drwxr-xr-x 7 yamasaki yamasaki 4096 Apr 17 08:30 公開
 
 ```
 
-## ネットワークの現在の設定の確認
-
-```
-$ ifconfig
-
-enp3s0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-        inet 192.168.0.18  netmask 255.255.255.0  broadcast 192.168.0.255
-        inet6 fe80::8aa6:d0ba:d83d:c568  prefixlen 64  scopeid 0x20<link>
-        ether 74:d4:35:c6:0b:b3  txqueuelen 1000  (Ethernet)
-        RX packets 58152998  bytes 26208402394 (26.2 GB)
-        RX errors 0  dropped 3153977  overruns 0  frame 0
-        TX packets 40433145  bytes 5928281714 (5.9 GB)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-
-lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
-        inet 127.0.0.1  netmask 255.0.0.0
-        inet6 ::1  prefixlen 128  scopeid 0x10<host>
-        loop  txqueuelen 1000  (Local Loopback)
-        RX packets 1474075  bytes 144875568 (144.8 MB)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 1474075  bytes 144875568 (144.8 MB)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-
-```
-
 ## IPアドレスの確認
+
+自分のIPアドレスを確認してください
 
 ```
 $ ip addr
@@ -101,7 +77,6 @@ $ ip addr
     link/ether 54:27:1e:9e:9f:27 brd ff:ff:ff:ff:ff:ff
 
 ```
-
 
 ## 新しいディレクトリの作成
 
@@ -266,37 +241,26 @@ $ echo $PATH
 
 ### 画面の下のメニューの見方
 
-*    ^X などは、controlキーを押しながらｘを押すという意味
-*    M-X などは、escキーを押してxを押すという意味
+`    ^X などは、controlキーを押しながらｘを押すという意味`
+`    M-X などは、escキーを押してxを押すという意味`
 
 #### 編集したデータの保存方法
 
-*     ^X して　Y で保存終了
+` ^O ファイル名を確認して enter で保存`
+
   
 #### カットアンドペースト
  
- *   ^K でカットして、^U で貼り付け
+`   ^K でカットして、^U で貼り付け`
  
 #### 文字列の検索
 
-*    ^W 検索文字列
+`    ^W 検索文字列`
 
-## ssh のインストール
+#### 終了
 
-```
-sudo apt install ssh
-```
+`     ^X 終了`
 
-### 各マシンでのIPアドレスの確認
-
-```
-ip addr
-```
-
-IP アドレスを確認し、隣同士でIPアドレスを教える
-
-	i92.268.1.X
-	
 ### ssh でリモートログイン
 
 ```
@@ -304,3 +268,18 @@ ssh kindai@192.168.1.X
 ```
 
 
+### 演習ネットワーク
+
+```
+                         Internet
+                              |
+              253             1         
+    -----------+--------------+------------------------------------------------------ 192.168.0.0/24
+        [ router1 ](SSHサーバ)   
+               |                   
+               |
+  2    3   4   1  18  19  34  35  50  66  67  82  83  98  99 114 130 131 146 147 162
+--+----+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+- 192.168.1.0/24
+ G8R  G4R G1R     G2R G1  G3R G2  G3  G5R G4  G6R G5  G7R G6  G7  G9R G8 G10R G9 G10
+ 
+```
