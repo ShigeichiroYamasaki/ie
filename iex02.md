@@ -5,7 +5,10 @@
 
 * ubuntu のターミナルでssh 接続
 * windows のpower shell でssh 接続
+ [PowerShellとは](https://goworkship.com/magazine/powershell/)
 * Mac のターミナルで ssh 接続
+[Macでターミナルとシェルを使うための基礎知識](https://eh-career.com/engineerhub/entry/2019/02/19/103000)
+
 
 #### 以下，結果をメモしていく
 
@@ -264,7 +267,7 @@ $ echo $PATH
 ### ssh でリモートログイン
 
 ```
-ssh kindai@192.168.1.X
+ssh ubuntu@192.168.1.X
 ```
 
 

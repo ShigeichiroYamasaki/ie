@@ -56,7 +56,7 @@ ifconfig
 ## ルーティングテーブルの確認
 
 ```
-$ ip r
+$ ip route
 
 default via 192.168.0.1 dev wlp0s20f3 proto static metric 600 
 169.254.0.0/16 dev wlp0s20f3 scope link metric 1000 
@@ -77,7 +77,7 @@ default via 192.168.0.1 dev wlp0s20f3 proto static metric 600
 ## ARPテーブルの確認
 
 ```
-$ arp
+$ sudo arp -a
 ```
 
 * MACアドレスとIPアドレスの対応
@@ -87,7 +87,7 @@ $ arp
 確認したい相手のIPアドレスを知る
 
 ```
-R $ ping 192.168.0.35
+$ ping 192.168.0.35
 
 PING 192.168.0.35 (192.168.0.35) 56(84) bytes of data.
 64 bytes from 192.168.0.35: icmp_seq=1 ttl=64 time=0.326 ms
