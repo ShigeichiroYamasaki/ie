@@ -86,50 +86,33 @@ nano test01.txt
 |置換　　|Ctrl + WR|
 
 
+## 班分け（10班に分けます）
+
+* １班　学籍番号の最終桁が１の人
+* ２班　学籍番号の最終桁が２の人
+* ３班　学籍番号の最終桁が３の人
+* ４班　学籍番号の最終桁が４の人
+* ５班　学籍番号の最終桁が５の人
+* ６班　学籍番号の最終桁が６の人
+* ７班　学籍番号の最終桁が７の人
+* ８班　学籍番号の最終桁が８の人
+* ９班　学籍番号の最終桁が９の人
+* 10班　学籍番号の最終桁が０の人
+
+## 管理するルータ
+
+* G1R  １班
+* G2R　２班
+* G3R　３班
+* G4R　４班
+* G5R　５班
+* G6R　６班
+* G7R　７班
+* G8R　８班
+* G9R　９班
+* G10R　１０班
 
 
-## ルーターにIP アドレスを設定する方法（まだ見るだけ）
-
-### netplanコマンドの設定ファイルを編集する
-
-設定ファイルの文法はここに説明されています。
-
-[https://ubuntu.com/server/docs/network-configuration](https://ubuntu.com/server/docs/network-configuration)
-
-
-#### 設定ファイル（例）
-
-/etc/netplan/99_config.yaml
-
-```
-sudo nano /etc/netplan/99_config.yaml
-```
-
-編集前（eth0)  だけの設定しかない
-
-##### 以下を確認する
-
-* eth0 
-* addresses
-* gateway4
-* nameservers
-* routes
-
-例
-
-```
-network:
-  version: 2
-  renderer: networkd
-  ethernets:
-    eth0:
-      dhcp4: false
-      dhcp6: false
-      addresses: [192.168.1.4/28]
-      gateway4: 192.168.1.1
-      nameservers:
-        addresses: [8.8.8.8, 8.8.4.4]
-```
 
 
 ## ネットワーク構成図
@@ -137,6 +120,10 @@ network:
 R が付いているのがルータ
 
 ### 1セグメント（現在のネットワーク）
+
+#### ネットワーク構成図を実際に紙に書いてみましょう
+
+★　自分の班のルータを丸で囲ってください。
 
 ```
                           Internet
@@ -314,35 +301,54 @@ R が付いているのがルータ
 
 ```
 
+## ルーターにIP アドレスを設定する方法（まだ見るだけ）
+
+### netplanコマンドの設定ファイルを編集する
+
+設定ファイルの文法はここに説明されています。
+
+[https://ubuntu.com/server/docs/network-configuration](https://ubuntu.com/server/docs/network-configuration)
+
+
+#### 設定ファイル（例）
+
+/etc/netplan/99_config.yaml
+
+```
+sudo nano /etc/netplan/99_config.yaml
+```
+
+編集前（eth0)  だけの設定しかない
+
+##### 以下を確認する
+
+* eth0 
+* addresses
+* gateway4
+* nameservers
+* routes
+
+例
+
+```
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    eth0:
+      dhcp4: false
+      dhcp6: false
+      addresses: [192.168.1.4/28]
+      gateway4: 192.168.1.1
+      nameservers:
+        addresses: [8.8.8.8, 8.8.4.4]
+```
+
+
 ## 各ルータの eth1 側のIPアドレス
 
 第４段階を想定してIPアドレスを設定する（サブネットマスクは24ビットのまま）
 
-## 班分け（10班に分けます）
-
-* １班　学籍番号の最終桁が１の人
-* ２班　学籍番号の最終桁が２の人
-* ３班　学籍番号の最終桁が３の人
-* ４班　学籍番号の最終桁が４の人
-* ５班　学籍番号の最終桁が５の人
-* ６班　学籍番号の最終桁が６の人
-* ７班　学籍番号の最終桁が７の人
-* ８班　学籍番号の最終桁が８の人
-* ９班　学籍番号の最終桁が９の人
-* 10班　学籍番号の最終桁が０の人
-
-## 管理するルータ
-
-* G1R  １班
-* G2R　２班
-* G3R　３班
-* G4R　４班
-* G5R　５班
-* G6R　６班
-* G7R　７班
-* G8R　８班
-* G9R　９班
-* G10R　１０班
 
 ## 担当ルータに ssh ログインしてください
 
