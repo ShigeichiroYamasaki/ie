@@ -77,7 +77,7 @@ default via 192.168.0.1 dev wlp0s20f3 proto static metric 600
 ## ARPテーブルの確認
 
 ```
-$ sudo arp -a
+$ arp -a
 ```
 
 * MACアドレスとIPアドレスの対応
