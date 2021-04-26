@@ -1,36 +1,5 @@
 # インターネット工学演習 04
 
-## ルータの基本
-
-ubuntu マシンをルータ化する場合
-
-
-### ipfoward の設定
-
-```
- sudo nano /etc/sysctl.conf
-```
-
-
-2行コメントをはずす
-
-
-```
-# Uncomment the next line to enable packet forwarding for IPv4
-net.ipv4.ip_forward=1
-
-# Uncomment the next line to enable packet forwarding for IPv6
-#  Enabling this option disables Stateless Address Autoconfiguration
-#  based on Router Advertisements for this host
-net.ipv6.conf.all.forwarding=1
-
-```
-
-再起動
-
-```
-sudo reboot
-```
 
 ### ip route コマンドの確認
 
@@ -301,6 +270,71 @@ R が付いているのがルータ
 
 ```
 
+## 担当ルータに ssh ログインしてください
+
+ユーザ名は ubuntu です
+
+```
+ssh ubuntu@IPアドレス
+```
+
+### ルータのIPアドレス
+
+
+|  ルータ  |  eth0  |
+| ---- | ---- | ----|
+|G1R|192.168.1.4|
+|G2R|192.168.1.18|
+|G3R|192.168.1.34|
+|G4R|192.168.1.3|
+|G5R|192.168.1.66|
+|G6R|192.168.1.82|
+|G7R|192.168.1.98|
+|G8R|192.168.1.2|
+|G9R|192.168.1.130|
+|G10R|192.168.1.146|
+
+### 自分が入ったマシンに痕跡を残す
+
+touch コマンドで空のファイルを作成してみましょう
+
+```
+touch 山崎参上
+```
+
+
+## ルータの基本
+
+ubuntu マシンをルータ化する場合
+
+
+### ipfoward の設定（すでに設定済です）
+
+```
+ sudo nano /etc/sysctl.conf
+```
+
+
+2行コメントをはずす
+
+
+```
+# Uncomment the next line to enable packet forwarding for IPv4
+net.ipv4.ip_forward=1
+
+# Uncomment the next line to enable packet forwarding for IPv6
+#  Enabling this option disables Stateless Address Autoconfiguration
+#  based on Router Advertisements for this host
+net.ipv6.conf.all.forwarding=1
+
+```
+
+再起動
+
+```
+sudo reboot
+```
+
 ## ルーターにIP アドレスを設定する方法（まだ見るだけ）
 
 ### netplanコマンドの設定ファイルを編集する
@@ -350,37 +384,6 @@ network:
 第４段階を想定してIPアドレスを設定する（サブネットマスクは24ビットのまま）
 
 
-## 担当ルータに ssh ログインしてください
-
-ユーザ名は ubuntu です
-
-```
-ssh ubuntu@IPアドレス
-```
-
-### ルータのIPアドレス
-
-
-|  ルータ  |  eth0  |
-| ---- | ---- | ----|
-|G1R|192.168.1.4|
-|G2R|192.168.1.18|
-|G3R|192.168.1.34|
-|G4R|192.168.1.3|
-|G5R|192.168.1.66|
-|G6R|192.168.1.82|
-|G7R|192.168.1.98|
-|G8R|192.168.1.2|
-|G9R|192.168.1.130|
-|G10R|192.168.1.146|
-
-### 自分が入ったマシンに痕跡を残す
-
-touch コマンドで空のファイルを作成してみましょう
-
-```
-touch 山崎参上
-```
 
 
 ### ルータの eth1 を含んだIPアドレス
