@@ -1,5 +1,7 @@
 # インターネット工学演習 04
 
+# 紙とペンを用意しましょう
+
 ### 山崎のssh サーバにssh ログインしてください
 
 
@@ -308,17 +310,41 @@ sudo netplan apply
 ip addr
 ```
 
-## eth1 側からssh ログインする
+### 各班のサーバに ssh ログインする
 
-### 一度ログアウトする
-
-```
-exit
-```
+１班はG1にssh ログイン，…
 
 ```
-ssh ubuntu@eth1側のIPアドレス
+ssh ubuntu@各班のサーバのIPアドレス
 ```
+
+
+## 各班のルータにeth1 側からssh ログインできることを確認する
+
+
+```
+ssh ubuntu@各班のルータのeth1側のIPアドレス
+```
+
+
+### traceroute のインストール
+
+```
+sudo apt install traceroute
+```
+
+### ルーティングの確認
+
+他のすべての班のサーバとルータに ping が到達することを確認する
+
+traceroute で経路を確認する
+
+```
+ping サーバやルータのIPアドレス
+
+traceroute サーバやルータのIPアドレス
+```
+
 
 ### host名の設定（おまけ）
 
