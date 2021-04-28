@@ -1,17 +1,7 @@
 # インターネット工学演習 04
 
+### 山崎のssh サーバにssh ログインしてください
 
-### ip route コマンドの確認
-
-```bash
-ip route
-```
-
-登録
-
-```
-sudo ip r add 宛先ネットワーク/サブネット via ゲートウェアドレス  dev ネットワークインタフェス
-```
 
 ## nanoエディターの練習
 
@@ -54,6 +44,23 @@ nano test01.txt
 |後方へ続けて検索　|	Alt + Q|
 |置換　　|Ctrl + WR|
 
+### 試しに次の内容を入力して保存してください
+
+```
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    eth0:
+      dhcp4: true
+      dhcp6: true
+```
+
+### ip route コマンドの確認
+
+```bash
+ip route
+```
 
 ## 班分け（10班に分けます）
 
@@ -83,7 +90,6 @@ nano test01.txt
 
 
 
-
 ## ネットワーク構成図
 
 R が付いているのがルータ
@@ -110,7 +116,224 @@ R が付いているのがルータ
 
 ```
 
-### 2セグメントの例（第１段階）
+
+## 担当ルータに ssh ログイン
+
+ユーザ名は ubuntu です
+
+```
+ssh ubuntu@IPアドレス
+```
+
+### ルータのIPアドレス
+
+
+|  ルータ  |  eth0  |
+| ---- | ---- | ----|
+|G1R|192.168.1.4|
+|G2R|192.168.1.18|
+|G3R|192.168.1.34|
+|G4R|192.168.1.3|
+|G5R|192.168.1.66|
+|G6R|192.168.1.82|
+|G7R|192.168.1.98|
+|G8R|192.168.1.2|
+|G9R|192.168.1.130|
+|G10R|192.168.1.146|
+
+### 自分が入ったマシンに痕跡を残す
+
+touch コマンドで空のファイルを作成してみましょう
+
+```
+touch <ファイル名>
+```
+
+```
+touch 山崎参上
+```
+
+
+## ルータの基本
+
+ubuntu マシンをルータ化する場合
+
+
+### ipfoward の設定（すでに設定済です）
+
+```
+ sudo nano /etc/sysctl.conf
+```
+
+
+以下の2行のコメントをはずすとルータ化されます。
+（再起動が必要）
+
+
+```
+# Uncomment the next line to enable packet forwarding for IPv4
+net.ipv4.ip_forward=1
+
+# Uncomment the next line to enable packet forwarding for IPv6
+#  Enabling this option disables Stateless Address Autoconfiguration
+#  based on Router Advertisements for this host
+net.ipv6.conf.all.forwarding=1
+
+```
+
+再起動方法（今回は実行しない）
+
+```
+sudo reboot
+```
+
+## ルーターにIP アドレスを設定する方法（まだ見るだけ）
+
+### netplanコマンドの設定ファイルを編集する
+
+設定ファイルの文法はここに説明されています。
+
+[https://ubuntu.com/server/docs/network-configuration](https://ubuntu.com/server/docs/network-configuration)
+
+
+#### 設定ファイル（例）
+
+/etc/netplan/99_config.yaml
+
+```
+sudo nano /etc/netplan/99_config.yaml
+```
+
+編集前（eth0)  だけの設定しかない
+
+##### 以下を確認する
+
+* eth0 
+* addresses
+* gateway4
+* nameservers
+* routes
+
+例
+
+```
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    eth0:
+      dhcp4: false
+      dhcp6: false
+      addresses: [192.168.1.4/24]
+      gateway4: 192.168.1.1
+      nameservers:
+        addresses: [8.8.8.8, 8.8.4.4]
+```
+
+
+## 各ルータの eth1 側のIPアドレス
+
+```
+                          Internet
+                              |
+              253             1      
+    -----------+--------------+------------------------------------------------------ 192.168.0.0/24
+        [ router1 ](SSH)         
+               |                         
+               |
+  2    3   4   1  18  19  34  35  50  66  67  82  83  98  99 114 130 131 146 147 162
+--+----+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+-- 192.168.1.0/24
+ G8R  G4R G1R     G2R G1  G3R G2  G3  G5R G4  G6R G5  G7R G6  G7  G9R G8 G10R G9 G10
+  |    |   |       |       |           |       |       |           |       |
+ 129  65  17      33      49          81      97     113         145      161
+ 
+
+```
+
+
+### ルータの eth1 を含んだIPアドレス
+
+|  ルータ  |  eth0  | eth1|
+| ---- | ---- | ----|
+|G1R|192.168.1.4|192.168.1.17|
+|G2R|192.168.1.18|192.168.1.33|
+|G3R|192.168.1.34|192.168.1.49|
+|G4R|192.168.1.3|192.168.1.65|
+|G5R|192.168.1.66|192.168.1.81
+|G6R|192.168.1.82|192.168.1.97|
+|G7R|192.168.1.98|192.168.1.113|
+|G8R|192.168.1.2|192.168.1.129|
+|G9R|192.168.1.130|192.168.1.145|
+|G10R|192.168.1.146|192.168.1.161|
+
+
+
+### ルータのeth1 のIPアドレスを設定する
+
+編集後（eth1の設定を追加）
+
+例
+
+```
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    eth0:
+      dhcp4: false
+      dhcp6: false
+      addresses: [192.168.1.4/24]
+      gateway4: 192.168.1.1
+      nameservers:
+        addresses: [8.8.8.8, 8.8.4.4]
+    eth1:
+      dhcp4: false
+      dhcp6: false
+      addresses: [192.168.1.17/24]
+      nameservers:
+        addresses: [8.8.8.8, 8.8.4.4]
+```
+
+### netplan コマンドの実行によって設定を反映させる
+
+★注意！　リモート作業で設定に間違いがあると２度とつながらなくなります
+
+```
+sudo netplan apply
+```
+
+### 設定の確認
+
+```
+ip addr
+```
+
+## eth1 側からssh ログインする
+
+### 一度ログアウトする
+
+```
+exit
+```
+
+```
+ssh ubuntu@eth1側のIPアドレス
+```
+
+### host名の設定（おまけ）
+
+ホスト名を付けておくとわかりやすい（演習環境ではすでに名前をつけています）
+
+
+```
+sudo hostnamectl set-hostname <ホスト名>
+```
+
+# 今後のネットワーク
+
+### 2セグメントの例（第１段階）次回の授業
+
+★サブネットマスクが25ビットになっていることに注意！
 
 ```
                           Internet
@@ -133,7 +356,7 @@ R が付いているのがルータ
 
 ### 3セグメント (4セグメント）の例（第２段階）
 
-
+★サブネットマスクが26ビットになっていることに注意！
 
 ```
                            Internet
@@ -162,6 +385,7 @@ R が付いているのがルータ
 ```
 
 ### 6セグメント（８セグメント）の例（第３段階）
+★サブネットマスクが27ビットになっていることに注意！
 
 ```
                                      Internet
@@ -203,6 +427,8 @@ R が付いているのがルータ
 ```
 
 ### 11セグメント（16セグメント）の例（第４段階）
+
+★サブネットマスクが28ビットになっていることに注意！
 
 ```
                                      Internet
@@ -268,200 +494,6 @@ R が付いているのがルータ
  
 
 
-```
-
-## 担当ルータに ssh ログインしてください
-
-ユーザ名は ubuntu です
-
-```
-ssh ubuntu@IPアドレス
-```
-
-### ルータのIPアドレス
-
-
-|  ルータ  |  eth0  |
-| ---- | ---- | ----|
-|G1R|192.168.1.4|
-|G2R|192.168.1.18|
-|G3R|192.168.1.34|
-|G4R|192.168.1.3|
-|G5R|192.168.1.66|
-|G6R|192.168.1.82|
-|G7R|192.168.1.98|
-|G8R|192.168.1.2|
-|G9R|192.168.1.130|
-|G10R|192.168.1.146|
-
-### 自分が入ったマシンに痕跡を残す
-
-touch コマンドで空のファイルを作成してみましょう
-
-```
-touch 山崎参上
-```
-
-
-## ルータの基本
-
-ubuntu マシンをルータ化する場合
-
-
-### ipfoward の設定（すでに設定済です）
-
-```
- sudo nano /etc/sysctl.conf
-```
-
-
-2行コメントをはずす
-
-
-```
-# Uncomment the next line to enable packet forwarding for IPv4
-net.ipv4.ip_forward=1
-
-# Uncomment the next line to enable packet forwarding for IPv6
-#  Enabling this option disables Stateless Address Autoconfiguration
-#  based on Router Advertisements for this host
-net.ipv6.conf.all.forwarding=1
-
-```
-
-再起動
-
-```
-sudo reboot
-```
-
-## ルーターにIP アドレスを設定する方法（まだ見るだけ）
-
-### netplanコマンドの設定ファイルを編集する
-
-設定ファイルの文法はここに説明されています。
-
-[https://ubuntu.com/server/docs/network-configuration](https://ubuntu.com/server/docs/network-configuration)
-
-
-#### 設定ファイル（例）
-
-/etc/netplan/99_config.yaml
-
-```
-sudo nano /etc/netplan/99_config.yaml
-```
-
-編集前（eth0)  だけの設定しかない
-
-##### 以下を確認する
-
-* eth0 
-* addresses
-* gateway4
-* nameservers
-* routes
-
-例
-
-```
-network:
-  version: 2
-  renderer: networkd
-  ethernets:
-    eth0:
-      dhcp4: false
-      dhcp6: false
-      addresses: [192.168.1.4/28]
-      gateway4: 192.168.1.1
-      nameservers:
-        addresses: [8.8.8.8, 8.8.4.4]
-```
-
-
-## 各ルータの eth1 側のIPアドレス
-
-第４段階を想定してIPアドレスを設定する（サブネットマスクは24ビットのまま）
-
-
-
-
-### ルータの eth1 を含んだIPアドレス
-
-|  ルータ  |  eth0  | eth1|
-| ---- | ---- | ----|
-|G1R|192.168.1.4|192.168.1.17|
-|G2R|192.168.1.18|192.168.1.33|
-|G3R|192.168.1.34|192.168.1.49|
-|G4R|192.168.1.3|192.168.1.65|
-|G5R|192.168.1.66|192.168.1.81
-|G6R|192.168.1.82|192.168.1.97|
-|G7R|192.168.1.98|192.168.1.113|
-|G8R|192.168.1.2|192.168.1.129|
-|G9R|192.168.1.130|192.168.1.145|
-|G10R|192.168.1.146|192.168.1.161|
-
-
-
-### ルータのeth1 のIPアドレスを設定する
-
-編集後（eth1の設定を追加）
-
-例
-
-```
-network:
-  version: 2
-  renderer: networkd
-  ethernets:
-    eth0:
-      dhcp4: false
-      dhcp6: false
-      addresses: [192.168.1.4/28]
-      gateway4: 192.168.1.1
-      nameservers:
-        addresses: [8.8.8.8, 8.8.4.4]
-    eth1:
-      dhcp4: false
-      dhcp6: false
-      addresses: [192.168.1.17/24]
-      nameservers:
-        addresses: [8.8.8.8, 8.8.4.4]
-```
-
-### netplan コマンドの実行によって設定を反映させる
-
-★注意！　リモート作業で設定に間違いがあると２度とつながらなくなります
-
-```
-sudo netplan apply
-```
-
-### 設定の確認
-
-```
-ip addr
-```
-
-## eth1 側からssh ログインする
-
-### 一度ログアウトする
-
-```
-exit
-```
-
-```
-ssh ubuntu@eth1側のIPアドレス
-```
-
-### host名の設定（おまけ）
-
-ホスト名を付けておくとわかりやすい（演習環境ではすでに名前をつけています）
-
-
-```
-sudo hostnamectl set-hostname <ホスト名>
 ```
 
 
