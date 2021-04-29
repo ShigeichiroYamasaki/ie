@@ -252,6 +252,26 @@ network:
 
 ```
 
+### traceroute のインストール
+
+```
+sudo apt install traceroute
+```
+
+### ルーティングの確認
+
+他のすべての班のサーバとルータに ping が到達することを確認する
+
+traceroute で経路を確認する
+
+```
+ping サーバやルータのIPアドレス
+```
+
+```
+traceroute サーバやルータのIPアドレス
+```
+
 
 ### ルータの eth1 を含んだIPアドレス
 
@@ -319,20 +339,6 @@ ssh ubuntu@各班のサーバのIPアドレス
 ```
 
 
-## 各班のルータにeth1 側からssh ログインできることを確認する
-
-
-```
-ssh ubuntu@各班のルータのeth1側のIPアドレス
-```
-
-
-### traceroute のインストール
-
-```
-sudo apt install traceroute
-```
-
 ### ルーティングの確認
 
 他のすべての班のサーバとルータに ping が到達することを確認する
@@ -345,6 +351,15 @@ ping サーバやルータのIPアドレス
 traceroute サーバやルータのIPアドレス
 ```
 
+## 各班のルータにeth1 側からssh ログインできることを確認する
+
+
+```
+ssh ubuntu@各班のルータのeth1側のIPアドレス
+```
+
+
+ログインに成功すれば成功！
 
 ### host名の設定（おまけ）
 
