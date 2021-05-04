@@ -2,7 +2,22 @@
 
 # 紙とペンを用意しましょう
 
-### 山崎のssh サーバにssh ログインしてください
+## AWS educate の利用
+
+[https://aws.amazon.com/jp/education/awseducate/](https://aws.amazon.com/jp/education/awseducate/)
+
+AWS Educate にサインイン
+
+[https://blog.codecamp.jp/aws_educate](https://blog.codecamp.jp/aws_educate)
+
+### EC2 のインスタンスの作成 (ubuntu 20.04LTS)
+
+### ssh ログイン
+
+## 山崎のssh サーバにssh ログインしてください
+
+EC2のインスタンスからログインしてみてください
+
 
 
 ## ネットワーク構成図
@@ -11,7 +26,10 @@
 
 ### 2セグメントの例（第１段階）
 
-★サブネットマスクが25ビットになっていることに注意！
+####  サブネットマスクが25ビットになっていることに注意！
+
+#### G8R （８班のルータ）で２つのネットワークが接続されています。
+
 
 ```
                           Internet
@@ -21,65 +39,111 @@
         [ router1 ](SSH)           
                |                   
                |
-  2    3   4   1  18  19  34  35  50  66  67  82  83  98  99 114 
---+----+---+---+---+---+---+---+---+---+---+---+---+---+---+---+-- 192.168.1.0/25
- G8R  G4R G1R     G2R G1  G3R G2  G3  G5R G4  G6R G5  G7R G6  G7 
-  |
-  |
+               |
+  2    3   4   1  18  19  34  35  50  66  67  82  83  98  99 114
+--+----+---+---+---+---+---+---+---+---+---+---+---+---+---+---+- 192.168.1.0/25
+ G8R  G4R G1R     G2R G1  G3R G2  G3  G5R G4  G6R G5  G7R G6  G7
+  |    |   |       |       |           |       |       |        
+  |   65  17      33      49          81      97     113   
+  |   
  129  130  131  146  147  162
 --+----+----+----+----+----+-------------------------------------- 192.168.1.128/25
       G9R  G8   G10R G9  G10
+       |         |
+     145       161
+
+
  
 ```
 
-## 各班担当のルータとホストのIPアドレスを修正する
+## ルーティングテーブルの例
 
-例　1班は，G1,　G1R　を担当
-　　２班は，G2,　G2R　を担当
-　　...
-　　10班は，G10，　G10R　を担当
+## router1
 
-
-### netplan の設定ファイルを修正
-
-24ビットマスクを25ビットマスクに修正する
+### デバイス名の確認
 
 ```
-sudo nano /etc/netplan/99_config.yaml
+ip addr
 ```
 
-例
+* wl で始まるデバイスは. WiFi なので，ここでは無視する
+* USB接続のネットワーク・インターフェースは複雑な名前になることが多い
+* Raspberry pi の場合は，eth0, eth1 のようなシンプルなデバイス名になる
 
 ```
-network:
-  version: 2
-  renderer: networkd
-  ethernets:
-    eth0:
-      dhcp4: false
-      dhcp6: false
-      addresses: [192.168.1.4/25]
-      gateway4: 192.168.1.1
-      nameservers:
-        addresses: [8.8.8.8, 8.8.4.4]
-    eth1:
-      dhcp4: false
-      dhcp6: false
-      addresses: [192.168.1.17/25]
-      nameservers:
-        addresses: [8.8.8.8, 8.8.4.4]
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 94:c6:91:a7:86:88 brd ff:ff:ff:ff:ff:ff
+    altname enp0s31f6
+    inet 192.168.0.253/24 brd 192.168.0.255 scope global noprefixroute eno1
+       valid_lft forever preferred_lft forever
+    inet6 240f:ca:425:1:8bf8:a4d1:de85:b08c/64 scope global temporary dynamic 
+       valid_lft 274sec preferred_lft 274sec
+    inet6 240f:ca:425:1:9fd3:25a6:97cf:5b2d/64 scope global dynamic mngtmpaddr noprefixroute 
+       valid_lft 274sec preferred_lft 274sec
+    inet6 fe80::39ac:5f92:2edc:5a66/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+3: wlp58s0: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether 64:5d:86:86:8c:8d brd ff:ff:ff:ff:ff:ff
+4: enx00e04c68020d: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 00:e0:4c:68:02:0d brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.1/25 brd 192.168.1.127 scope global noprefixroute enx00e04c68020d
+       valid_lft forever preferred_lft forever
+    inet6 fe80::487e:b7a2:4f81:58b1/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+
 ```
 
-### netplan 実行
+
+### ネットワーク構成図
 
 ```
-sudo netplan apply
+                          Internet
+                              |
+              253             1         
+    -----------+--------------+---------------------------------- 192.168.0.0/24
+               | eno1 
+        [ router1 ](SSH)           
+               | enx00e04c68020d                   
+               |
+               |
+  2    3   4   1  18  19  34  35  50  66  67  82  83  98  99 114
+--+----+---+---+---+---+---+---+---+---+---+---+---+---+---+---+- 192.168.1.0/25
+ G8R  G4R G1R     G2R G1  G3R G2  G3  G5R G4  G6R G5  G7R G6  G7
+  |    |   |       |       |           |       |       |        
+  |   65  17      33      49          81      97     113   
+  |   
+ 129  130  131  146  147  162
+--+----+----+----+----+----+-------------------------------------- 192.168.1.128/25
+      G9R  G8   G10R G9  G10
+       |         |
+     145       161
+
+ 
 ```
 
+### ルーティングテーブル
+
+|宛先ネットワーク | サブネットマスク|nextゲートウェー|インターフェース|
+| --- | --- | ---| ---|
+|192.168.0.0|255.255.255.0|直接接続| eno1|
+|192.168.1.0|255.255.255.128|直接接続| enx00e04c68020d |
+|192.168.1.128|255.255.255.128|直接接続| enx00e04c68020d |
+|default|255.255.255.0|192.168.0.1| eno1|
 
 
+### 全員 router1 ssh ログイン
 
-## ルーティングテーブルの確認
+```
+ssh 自分のユーザID@192.168.1.1
+```
+
+### ルーティングテーブルの確認
 
 ```
 ip route
@@ -89,8 +153,131 @@ ip route
 
 全員，紙に書いてみましょう
 
+
+
+## netplan設定の修正
+
+G8R, G9R, G8, G10R, G9, G10 の設定の修正は山崎が事前に行っています。
+
+##### 山崎が行った修正内容　netplan の設定変更 (G9R) の例
+
+* サブネットマスクが24ビットから25ビットになった
+* G9R のデフォルトゲートウェーは？ --> G8Rの下側NIC (192.168.1.129)
+* G8, G10R, G9, G10 の修正も同様
+
+
+```
+sudo nano /etc/netplan/99_config.yaml 
+```
+
+ファイルの修正内容
+
+```
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    eth0:
+      dhcp4: false
+      dhcp6: false
+      addresses: [192.168.1.130/25] # <--- 25ビットマスクに変更
+      gateway4: 192.168.1.129       # <--- デフォルトゲートウェーを G8R に変更
+      nameservers:
+        addresses: [8.8.8.8, 8.8.4.4]
+    eth1:
+      dhcp4: false
+      dhcp6: false
+      addresses: [192.168.1.145/25]
+      nameservers:
+        addresses: [8.8.8.8, 8.8.4.4]
+
+```
+
+netplan の有効化
+
+```
+sudo netplan apply
+```
+
+
+## G1~G7 までの各班担当のルータとホストの修正する
+
+### router1 から ping でルーティングが完全でないことを確認する
+
+* 全マシンに対してpingを行い，OKなものとNGなものを確認する
+* 原因：G1, G1R, G2, G2R, G3, G3R, G4, G4R, G5,G5R, G6,G6R, G7,G7R の設定が間違っているから
+
+
+```
+ping <IPアドレス（全マシン）>
+```
+
+## G1~G7 までの各班担当のルータとホストにsshログインする
+
+* ルーティングが完全でないので rouer1 からはログインできない。
+* 一旦 G8R にssh ログインしてからならログイン可能
+
+G8R にログインする
+
+```
+ssh ubuntu@192.168.1.2
+```
+
+### G1~G7 までの各班担当のルータとホストのnetplan の設定ファイルを修正
+
+24ビットマスクを25ビットマスクに修正する
+
+```
+sudo nano /etc/netplan/99_config.yaml
+```
+
+例 (G1)
+
+```
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    eth0:
+      dhcp4: false
+      dhcp6: false
+      addresses: [192.168.1.19/25]  # /24 を /25 に修正
+      gateway4: 192.168.1.1
+      nameservers:
+        addresses: [8.8.8.8, 8.8.4.4]
+
+```
+
+netplan 実行
+
+```
+sudo netplan apply
+```
+
+### ping でルーティングができるようになったことを確認する
+
+
+```
+ping <IPアドレス（全マシン）>
+```
+
+### traceroute で経路を確認
+
+```
+traceroute <IPアドレス>
+```
+
+## ルーティングテーブルの確認
+
+```
+ip route
+```
+
 ### 全員 G8R にssh ログイン
 
+```
+ssh ubuntu@192.168.1.2
+```
 
 ### ルーティングテーブルの確認
 
@@ -98,29 +285,15 @@ ip route
 ip route
 ```
 
+### traceroute で経路を確認してみましょう
 
-### 各班の担当サーバにssh ログイン
-
-１班はG1にssh ログイン，…
-
+G9R までの経路の場合
 
 ```
-ssh ubuntu@各班のサーバのIPアドレス
+traceroute 192.168.1.130
 ```
 
 
-
-### ルーティングの確認
-
-他のすべての班のサーバとルータに ping が到達することを確認する
-
-traceroute で経路を確認する
-
-```
-ping サーバやルータのIPアドレス
-
-traceroute サーバやルータのIPアドレス
-```
 
 # 今後のネットワーク
 
@@ -140,17 +313,20 @@ traceroute サーバやルータのIPアドレス
   2    3   4   1  18  19  34  35  50 
 --+----+---+---+---+---+---+---+---+-------------------- 192.168.1.0/26
  G8R  G4R G1R     G2R G1  G3R G2  G3 
-  |    |
+  |    |   |       |       |
+  |    |  17      33      49 
   |    |
   |   65  66  67  82  83  98  99  114  
   |   -+---+---+---+---+---+---+---+-------------------- 192.168.1.64/26
   |       G5R G4  G6R G5  G7R G6  G7   
-  |
+  |        |       |       |
+  |       81      97     113   
   |
  129  130  131  146  147  162
---+----+----+----+----+----+---------------------------- 192.168.1.128/25
+--+----+----+----+----+----+--------------------------- 192.168.1.128/25
       G9R  G8   G10R G9  G10
- 
+       |         |
+     145       161
 
 
 ```
@@ -169,31 +345,38 @@ traceroute サーバやルータのIPアドレス
   2       3       4       1    18    19  
 --+-------+-------+-------+----+-----+--------------- 192.168.1.0/27
 [G8R]   [G4R]   [G1R]        [G2R]  G1   
-  |       |                    |
+  |       |       |            |  
+  |       |      17            |   
   |       |                    |
   |       |                    33    34    35    50   
   |       |                 ---+-----+-----+-----+--- 192.168.1.32/27
   |       |                        [G3R]   G2    G3     
-  |       |
+  |       |                          |
+  |       |                         49
   |       |
   |       65    66    67    82    83     
   |     --+-----+-----+-----+-----+------------------ 192.168.1.64/27
   |           [G5R]   G4  [G6R]   G5     
-  |                         |
+  |             |           |
+  |            81           |
   |                         |
   |                         97    98    99   114  
   |                    -----+-----+-----+-----+------ 192.168.1.96/27
   |                             [G7R]   G6    G7   
-  |
+  |                               |
+  |                             113
   |
  129     130   131   146   147  
 --+-------+-----+-----+-----+------------------------ 192.168.1.128/27
         [G9R]  G8  [G10R]   G9    
-                     |
+          |          |
+        145          |
                      |
                     161   162
                  ----+-----+------------------------- 192.168.1.160/27
                           G10
+ 
+
 
 ```
 
@@ -266,3 +449,11 @@ traceroute サーバやルータのIPアドレス
 
 
 ```
+
+## AWS の終了方法
+
+### 必ずインスタンスを停止させる
+
+停止させていないと，課金がつづいていく
+
+---
