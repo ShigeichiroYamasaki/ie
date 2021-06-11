@@ -262,32 +262,22 @@ ssh コマンドをペーストして，AWSにログイン
 
 [https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/ec2-instance-connect-set-up.html](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/ec2-instance-connect-set-up.html)
 
-## 自分のhtml用ディレクトリを作成
 
-```bash
-cd /var/www/html
+## nginx のインストール
 
-sudo mkdir ディレクトリ名（自分の学籍番号にしてください）
-
-sudo chown 自分のアカウント:自分のアカウント ディレクトリ名
-
-cd ディレクトリ名
+```
+sudo apt install nginx
 ```
 
-実行例
+### AWSのFirewallの設定
 
-```bash
-cd /va	r/www/html
-
-sudo mkdir 1811140000
-
-sudo chown 1811140075a: 1811140075a 1811140075
-
-cd 1811140075
-```
-
+セキュリティ設定のインバウンドルールにTCP/HTTPを追加
 
 ## HTMLの作成
+
+```
+sudo nano /var/www/html/index.html
+```
 
 ```html
 <meta charset="UTF-8">
@@ -303,12 +293,7 @@ cd 1811140075
 ```
 
 
-## コマンド
-
-```bash
-sudo tcpdump -Xvv -s 2048 -i eno1 rip
-```
-
+# コマンド
 
 ## digコマンド
 
