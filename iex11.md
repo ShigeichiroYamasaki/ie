@@ -3,51 +3,51 @@
 
 # WEBサーバの構築
 
-### sshサーバにログイン
 
-power shell などで ssh コマンド
+## AWS educate
 
-```
-ssh ユーザID@106.157.214.199
-```
+https://aws.amazon.com/jp/education/awseducate/
 
+### ubuntu 20.04LTS のインスタンスを起動してSSH接続
 
-### webサーバマシンにssh ログイン
+## nginx のアンインストール
 
-#### R マシンがwebサーバ
+nginx でfastCGIを利用する方法は少し複雑なので，aapche2 を利用することにします。
 
-```bash
-192.168.0.27
-```
-
-## 自分のhtml用ディレクトリを作成
+* nginxサーバの停止
 
 ```bash
-cd /var/www/html
-
-sudo mkdir ディレクトリ名（自分の学籍番号にしてください）
-sudo chown 自分のアカウント:自分のアカウント ディレクトリ名
-
-cd ディレクトリ名
+sudo service nginx stop
 ```
 
-実行例
+* apt でインストールしたパッケージをアンインストールする
 
 ```bash
-cd /var/www/html
-
-sudo mkdir 18111400000
-sudo chown  s18111400000r:s18111400000r 18111400000 
-
-cd 18111400000
+sudo apt remove nginx
 ```
+
+## apache2 のインストール
+
+```bash
+sudo apt install apache2
+```
+
+
+* apache2 の起動
+
+```bash
+sudo service apache2 start
+```
+
 
 ## 自分のページの作成
 
-```bash
-nano index.html
-```
 
+```bash
+cd /var/www/html
+
+sudo nano index.html
+```
 
 ## HTML
 
@@ -57,7 +57,7 @@ nano index.html
 <head>
 </head>
 <body>
-<h1>自分の名前</h1>
+<h1>”自分の名前”のページ</h1>
 
 </body>
 </html>
@@ -67,25 +67,17 @@ nano index.html
 ## ブラウザでURLでアクセスする
 
 ```
-http://106.157.214.199/(自分の学籍番号)/index.html
+http://グローバルアドレス/index.html
 ```
 
-### 例
-	
-```
-http://106.157.214.199/18111400000/index.html
-```
 
 ## form 文を含むページ
 
 自分のページを修正する
 
 ```bash
-cd /var/www/html/(自分の学籍番号)/
 sudo nano index.html
 ```
-
-(自分の学籍番号)/
 
 ```html
 <meta charset="UTF-8">
@@ -93,8 +85,8 @@ sudo nano index.html
  <head>
  </head>
  <body>
-  <h1>あまぞん</h1>
-  <form method='GET' action='/cgi-bin/(自分の学籍番号)/test.rb'>
+  <h1>あまぞん”自分の名前”</h1>
+  <form method='GET' action='/cgi-bin/test.rb'>
     <p>商品</p>
     <input type='text' name='product'>
     <p>数量</p>
@@ -109,48 +101,32 @@ sudo nano index.html
 
 ## CGI プログラムを動かす
 
-### apache2にcgiモジュールを組み込む
+
+### apache2 にCGIとして実行できるようにする
 
 ```bash
-sudo a2enmod cgi
+sudo a2enmod cgid 
 ```
-
-### apache2 に.rb ファイルをCGIとして実行できるように設定する
-
-#### apache2 の設定ファイルのディレクトリ
-
-```bash
-cd /etc/apache2/conf-available
-```
-
 
 ### apache2を再起動
 
 ```bash
-sudo systemctl restart apache2
+sudo service apache2 restart
 ```
+
+
+#### apache2 の設定ファイルのディレクトリ
+
+```bash
+cd /usr/lib/cgi-bin
+```
+
+
 
 ### スクリプトエイリアス用ディレクトリへ移動してディレクトリの作成所有権変更
 
 ```bash
 cd /usr/lib/cgi-bin/
-
-sudo mkdir（自分の学籍番号または名前)
-
-sudo chown ユーザID:ユーザID （自分の学籍番号または名前)
-
-cd （自分の学籍番号または名前)
-```
-
-実行例
-
-```bash
-cd /usr/lib/cgi-bin/
-
-sudo mkdir 18111400000
-sudo chown  s18111400000r:s18111400000r 18111400000 
-
-cd 18111400000
 ```
 
 
@@ -158,7 +134,7 @@ cd 18111400000
 
 
 ```bash
-nano test.rb
+sudo nano test.rb
 ```
 
 1行目のは#! は「シェバング」と呼ばれるもので、スクリプトを実行する言語処理系を呼び出すためのもの
