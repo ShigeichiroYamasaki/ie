@@ -10,21 +10,6 @@ https://aws.amazon.com/jp/education/awseducate/
 
 ### ubuntu 20.04LTS のインスタンスを起動してSSH接続
 
-## nginx のアンインストール
-
-nginx でfastCGIを利用する方法は少し複雑なので，aapche2 を利用することにします。
-
-* nginxサーバの停止
-
-```bash
-sudo service nginx stop
-```
-
-* apt でインストールしたパッケージをアンインストールする
-
-```bash
-sudo apt remove nginx
-```
 
 ## apache2 のインストール
 
@@ -100,6 +85,12 @@ sudo nano index.html
 ```
 
 ## CGI プログラムを動かす
+
+## ruby のインストール
+
+```bash
+sudo apt install ruby
+```
 
 
 ### apache2 にCGIとして実行できるようにする
