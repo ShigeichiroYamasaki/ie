@@ -1,13 +1,154 @@
 # インターネット工学演習 12
 
-# WEBサーバの構築2
+# WEBアプリケーション２
+
+AWSのEC2インスタンス作成を最初からもう一度やります。
 
 ## AWS educate
 
 https://aws.amazon.com/jp/education/awseducate/
 
-### ubuntu 20.04LTS のインスタンスを起動してSSH接続
+### MacOSX のsafari の場合
 
+「環境設定」→　「webサイト」→「ポップアップウィンドウ」でデフォルトを許可に
+
+1. AWS Educate にサインイン
+
+1. AWS Account
+
+1. AWS Educate Starter Account
+
+1.  AWS Console
+
+    開かないときは，ブラウザのポップアップグロックの設定を解除
+
+1. 仮想マシンの起動
+
+    * Ubuntu Server 20.04 LTS (HVM), SSD Volume Type 64ビットx86 を選択
+
+    * 確認と作成
+
+    * 起動
+
+    * メニューから「新しいキーペアの作成」を選択（すでに持っている人は「既存のキーペアを選択」でキーペア名を選択してもよいです）
+
+        キーペア名は，自分の名前にする
+
+1. キーファイルのダウンロード
+
+        ファイルのダウンロード先は，自分のPCのホームディレクトリ
+
+    * マックの場合は，「 ダウンロード」ディレクトリあたりにファイルがダウンロードされるので，ホームディレクトリに移動させる
+    * 移動させたファイルに対して，ターミナルアプリから以下のようにしてパーミッションを変更
+    * 
+```
+      chmod 400 ファイル名　
+```
+      
+    * 
+* windowsの場合は，power shell で  pwd コマンドで表示されたパスにファイルを置く
+    * windows の場合もパーミションの変更が必要なことがある
+
+ [Windows でパーミッションエラーが出たときの対処方法](https://qiita.com/eltociear/items/02e8b1f5590b49eb9d87)
+
+1.  インスタンスが実行状態を確認（少し時間がかかります）
+
+1.  インスタンスのチェックボックスをチェック
+
+1. 接続ボタンをクリック
+
+1.  SSH クライアントのタブをクリック
+
+    ログインの例をコピーして
+
+1.  ターミナルソフトを起動（ターミナル，power shell）
+
+1. ssh コマンドをペーストして，AWSにログイン
+
+
+
+
+## ubuntu 20.04LTS (64bit)のインストール
+
+[https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/ec2-instance-connect-set-up.html](https://docs.aws.amazon.com/ja_jp/AWSEC2/latest/UserGuide/ec2-instance-connect-set-up.html)
+
+## OSのアップデート
+
+```bash
+sudo apt update
+sudo apt upgrade -y
+```
+
+## apache2 のインストール
+
+```bash
+sudo apt install apache2
+```
+
+
+* apache2 の起動
+
+```bash
+sudo service apache2 start
+```
+
+### apache2 にCGIとして実行できるようにする
+
+```bash
+sudo a2enmod cgid 
+```
+
+### apache2を再起動
+
+```bash
+sudo service apache2 restart
+```
+
+
+## 自分のページの作成
+
+
+```bash
+cd /var/www/html
+
+sudo nano index.html
+```
+
+## HTML
+
+既存のデータを削除して以下を書き込む
+
+```html
+<meta charset="UTF-8">
+<html>
+<head>
+</head>
+<body>
+<h1>”自分の名前”のページ</h1>
+
+</body>
+</html>
+
+```
+
+## セキュリティグループを修正
+
+* 自分のインスタンスのセキュリティグループ名を確認する　（launch-wizard-２など）
+* セキュリティグループのタブを選択
+* 自分のセキュリティグループのチェックボックスをチェックする
+* 「インバウンドルール」のタブを選択
+* 「インバウンドルールを編集」
+* 「ルールを追加」
+* HTTPを追加　ソースは 0.0.0.0/0
+*
+
+## ブラウザでURLでアクセスする
+
+自分のインスタンスの「パブリック IPv4 アドレス」を確認する
+
+```
+http://グローバルアドレス/index.html
+```
 
 ## HTML作成
 
@@ -40,26 +181,30 @@ sudo nano index.html
 </html>
 ```
 
+
+
+## Ruby インストール
+
+
+```bash
+sudo snap install --classic ruby
+```
+
+
+### Ruby バージョンの確認
+
+```
+ruby -v
+```
+
+```
+ruby 3.0.1p64 (2021-04-05 revision 0fb782ee38) [x86_64-linux]
+```
+
+
 ## CGI プログラムを動かす
 
-## ruby のインストール
 
-```bash
-sudo apt install ruby
-```
-
-
-### apache2 にCGIとして実行できるようにする
-
-```bash
-sudo a2enmod cgid 
-```
-
-### apache2を再起動
-
-```bash
-sudo service apache2 restart
-```
 
 
 #### apache2 の設定ファイルのディレクトリ
@@ -177,95 +322,69 @@ curl http://＜IPアドレス＞/cgi-bin/test.rb?product=ぽるしぇ&amount=100
 ### ブラウザからやってみる
 
 ```
-http://106.157.214.199/(自分の学籍番号)/index.html
-```
-
-### 例
-	
-```
-http://106.157.214.199/18111400000/index.html
+http://＜IPアドレス＞/index.html
 ```
 
 
 ## RESTful Webアプリケーション
 
-## Ruby インストール
-
 
 
 ## Railsインストール
 
-### 事前にOS をupdate, upgradeしておく
-
 ```bash
-sudo apt update
-sudo apt -y upgrade
+cd ~
+
+nano install_rails.sh
 ```
 
 ```bash
-sudo apt install -y autoconf bison build-essential libssl-dev libyaml-dev libreadline-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev sqlite3 libsqlite3-dev
-sudo apt install -y nodejs npm
-sudo npm install n -g
-sudo n stable
-sudo apt purge -y nodejs npm
-exec $SHELL -l
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+#!/bin/bash
 sudo apt update
+sudo apt upgrade -y
+sudo apt install -y build-essential 
+sudo apt install -y clang
+sudo apt install -y cmake
+sudo apt install -y direnv
+sudo apt install -y git
+sudo apt install -y nodejs
+sudo apt install -y ruby-dev
+sudo apt install -y curl
+sudo apt install -y imagemagick
 sudo apt install -y yarn
-sudo apt install -y ruby ruby-dev
-sudo apt install -y ruby-bundler
+sudo apt install -y npm
+sudo npm install n -g
 
-sudo gem install nokogiri
+yarn install
+yarn upgrade
+
+sudo gem install bundler
 sudo gem install sqlite3
+sudo gem install json-jwt
+sudo gem install jwt
 sudo gem install rails
+sudo gem install twitter
+sudo gem install devise
+sudo gem install omniauth
+sudo gem install omniauth-twitter
+sudo gem install omniauth-facebook
 ```
 
-## 最初のRailsアプリの作成
+
+### 実行
 
 ```bash
-mkdir rails
-cd rails
-bundle install
-rails new kindai
+chmod u+x install_rails.sh
 
-## パスワードを入れる
-
-cd kindai
-
-bundle install
-
-rails g scaffold Blog title date:datetime text:text picture:string
-rake db:migrate
-rails webpacker:install
-
-## ポート番号を指定して起動
-rails s -b 0.0.0.0 -p ボート番号
+./install_rails.sh
 ```
 
-ポートマッピング
+シェルの再起動
 
-* 192.168.0.27	:8001
-* 192.168.0.35	:8002
-* 192.168.0.66	:8003
-* 192.168.0.227	:8004
-* 192.168.0.34	:8005
-* 192.168.0.130	:8006
-* 192.168.0.162	:8007
-* 192.168.0.33	:8008
-* 192.168.0.194	:8009
-* 192.168.0.226	:8010
-
-
-###  トップページにアクセス
-
-* IPアドレスをしらべる
-
-URLにアクセス
-
+```bash
+exec $SHELL -l
 ```
- http://106.157.214.199:ポート番号/blogs
-```
+
 
 ## RESTful APIの確認
 
@@ -286,174 +405,4 @@ URLにアクセス
 
 
 
-この手順でいくつか記事を作成／削除する
 
-### 新たなターミナルでRailsのディレクトリにアクセスする
-
-* rails ルートディレクトリ
-
-```bash
-cd ~
-cd rails
-cd kindai
-```
- 
-###  Bootstrap でデザインを追加
- 
- * application.html.erbを編集
-
- ```bash
- nano app/views/layouts/application.html.erb
- ```
- 
- 以下のように修正
- 
- ```heml
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Kindai</title>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.$
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-  </head>
-
-  <body>
-    <div class="container">
-      <%= yield %>
-    </div>
-
-  <footer>
-  <div class="container">Kindai 2019 </div>
-  </footer>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  </body>
-</html>
- ```
- 
-  
-#### CSSを修正
- 
-```bash
-nano app/assets/stylesheets/application.css
-```
- 
- ファイルの最後に以下を追加
- 
-```css
-body { padding-top: 100px; }
-footer { margin-top: 100px; }
-table, td, th { vertical-align: middle; border: none; }
-th { border-bottom: 1px solid #DDD; }
-```
- 
-### 写真アップロード機能を追加
- 
- rails root の Gemfile を修正
- 
- ```bash
- nano Gemfile
- ```
-
-次の一行を追加
-
-```ruby
-gem 'carrierwave'
-```
-
- bundler を実行
- 
- ```bash
- bundle install
- ```
- 
- ### 写真アップローダのジェネレータの実行
- 
- ```bash
- rails generate uploader Picture
- ```
-
-### モデルの修正
-
-```bash
-nano app/models/blog.rb
-```
-
-```ruby
-class Blog < ApplicationRecord
-  mount_uploader :picture, PictureUploader
-end
-```
-
-### formの修正
-
-```bash
-nano app/views/blogs/_form.html.erb
-```
-
-修正した結果
-
-```html
-<%= form_with(model: blog, local: true) do |form| %>
-  <% if blog.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(blog.errors.count, "error") %> prohibited this blog from being saved:</h2>
-
-      <ul>
-        <% blog.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :title %>
-    <%= form.text_field :title %>
-  </div>
-
-  <div class="field">
-    <%= form.label :date %>
-    <%= form.datetime_select :date %>
-  </div>
-
-  <div class="field">
-    <%= form.label :text %>
-    <%= form.text_area :text %>
-  </div>
-
-  <div class="field">
-    <%= form.label :picture %>
-    <%= form.file_field :picture %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
-
-
-```
-
-### ビューを修正
-
-```bash
-nano app/views/blogs/show.html.erb
-```
-修正部分
-
-```ruby
-<%= @blog.picture %>
-```
-
-修正結果
-
-```ruby
-<%= image_tag(@blog.picture_url, width: 600) if @blog.picture.present? %>
-```
-
-## RESTful APIの確認
