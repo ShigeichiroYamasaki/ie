@@ -186,8 +186,9 @@ sudo nano index.html
 ## Ruby インストール
 
 
+
 ```bash
-sudo snap install --classic ruby
+sudo apt install ruby
 ```
 
 
@@ -197,9 +198,6 @@ sudo snap install --classic ruby
 ruby -v
 ```
 
-```
-ruby 3.0.1p64 (2021-04-05 revision 0fb782ee38) [x86_64-linux]
-```
 
 
 ## CGI プログラムを動かす
@@ -352,11 +350,17 @@ sudo apt install -y ruby-dev
 sudo apt install -y curl
 sudo apt install -y imagemagick
 sudo apt install -y yarn
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+sudo apt update
+
+sudo apt install -y sqlite3 libsqlite3-dev
 sudo apt install -y npm
 sudo npm install n -g
+sudo n stable
 
-yarn install
-yarn upgrade
+sudo npm install -g npm
+sudo npm install -g yarn
 
 sudo gem install bundler
 sudo gem install sqlite3
@@ -378,7 +382,7 @@ chmod u+x install_rails.sh
 
 ./install_rails.sh
 
-sudo gem update -y
+sudo gem update
 ```
 
 シェルの再起動
@@ -407,26 +411,7 @@ rails g scaffold Blog title body:text
 rails webpacker:install
 ```
 
-#### Gemfile編集
 
-```bash
-nano Gemfile
-```
-
-```
-ruby '3.0.1'
-...
-
-```
-
-の下に以下を追加
-
-
-```
-gem 'bootstrap'
-gem 'jquery-rails'
-
-```
 
 ```bash
 bundle install
@@ -445,94 +430,24 @@ rails s -b 0.0.0.0
 ```
 
 
+
+## セキュリティグループを修正
+
+* 自分のインスタンスのセキュリティグループ名を確認する　（launch-wizard-２など）
+* セキュリティグループのタブを選択
+* 自分のセキュリティグループのチェックボックスをチェックする
+* 「インバウンドルール」のタブを選択
+* 「インバウンドルールを編集」
+* 「ルールを追加」
+* TCP 3000 ポートを追加　ソースは 0.0.0.0/0
+*
+
+
 ### ブラウザから確認
 
-http://localhost:3000/users
+http://＜グローバルアドレス＞:3000/blogs
 
 確認後，control-c でサーバを停止
-
-
-### CSSを編集
-
-```bash
-nano app/assets/stylesheets/application.css
-```
-
-最後に以下を追加
-
-```css
-@import "bootstrap"; 
-```
-
-### css のファイル名を.css から .scssに変更
-
-```bash
-mv app/assets/stylesheets/application.css app/assets/stylesheets/application.scss
-```
-
-### application.js を修正
-
-```bash
-nano app/javascript/packs/application.js
-```
-
-以下を追加する
-
-```javascript
-//=require bootstrap
-```
-
-### html を修正
-
-```bash
-nano app/views/users/index.html.erb
-```
-
-試しにファイルの一番上に以下を記述してみる
-
-```html
-<a class="btn btn-primary" href="#" role="button">Link</a>
-<button class="btn btn-primary" type="submit">Button</button>
-<input class="btn btn-primary" type="button" value="Input">
-<input class="btn btn-primary" type="submit" value="Submit">
-<input class="btn btn-primary" type="reset" value="Reset">
-```
-
-
-## Rails bootstrap の使い方
-
-### レイアウトの修正
-
-```bash
-nano app/views/layouts/application.html.erb
-```
-
-
-body　タグ部分に以下のように div タグを追加(<%= yield %>　をdiv で囲む)
-
-```html
-  ...
-
-  <body>
-    <div class="container">
-    <%= yield %>
-    </div>
-  </body>
-  
-...
-```
-
-### サーバー再起動
-
-
-```bash
-rails s -b 0.0.0.0
-```
-
-
-###  ブラウザをリロードかけてレイアウトの変化を確認
-
-
 
 
 
