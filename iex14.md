@@ -2,20 +2,21 @@
 
 ## ネットワーク性能評価ツールのインストール
 
-### 事前にOS をupdate, upgradeしておく
+### OSのアップデート（トラブルの発生を回避する）
 
 ```bash
 sudo apt update
-sudo apt -y upgrade
+sudo apt upgrade -y
 ```
 
 ### apache bench
 
 apacheをインストールすると自動的にインストールされる
+(apache2 をインストール済の人は不要です)
 
-### ping
-
-不要
+```bash
+sudo apt install apache2 -y
+```
 
 ### iperf3
 
@@ -52,6 +53,7 @@ sudo nano /etc/munin/munin.conf
 # must be writable by the user running munin-cron. They are all
 # defaulted to the values you see here.
 #
+
 dbdir /var/lib/munin
 htmldir /var/cache/munin/www
 logdir /var/log/munin
@@ -82,20 +84,18 @@ includedir /etc/munin/munin-conf.d
 
 ### apache24.conf
 
-```
-sudo mv /etc/munin/apache24.conf /etc/munin/apache24.conf_bak
-```
 
 ```
 sudo nano /etc/munin/apache24.conf
 ```
 
-以下をペースト
+Require local　をコメントにする（#  をつける）
+Require all granted を追加
 
 ```
 Alias /munin /var/cache/munin/www
 <Directory /var/cache/munin/www>
- # Require local
+ # Require local (ここと)
  Require all granted
  Options FollowSymLinks SymLinksIfOwnerMatch
  Options None
@@ -103,7 +103,7 @@ Alias /munin /var/cache/munin/www
 
 ScriptAlias /munin-cgi/munin-cgi-graph /usr/lib/munin/cgi/munin-cgi-graph
 <Location /munin-cgi/munin-cgi-graph>
- # Require local
+ # Require local(ここ)
  Require all granted
  Options FollowSymLinks SymLinksIfOwnerMatch
  <IfModule mod_fcgid.c>
@@ -121,7 +121,6 @@ ScriptAlias /munin-cgi/munin-cgi-graph /usr/lib/munin/cgi/munin-cgi-graph
 sudo service apache2 restart
 sudo service munin-node restart
 ```
-
 
 
 ## apache bench
@@ -148,23 +147,15 @@ WEBサーバのパフォーマンスデバッギング
 
 #### 使用法
 
-隣の人のマシンのIPアドレスを調べる
+グループ内でマシンのIPアドレスを教え合う
 
 
 ```bash
-ab -n 10000 -c 100 http://隣の人のIPアドレス
-ab -n 10000 -c 100 http://192.168.0.27/
+ab -n 10000 -c 100 http://グループの人のIPアドレス/
 ```
 
 * Complete requestsが正常に処理したリクエスト数
 * Failed requestsは、処理に失敗したリクエスト数
-
-* 何リクエストまで耐えられるか
-	* Failed requests: を見る
-	
-	
-	-n と -cの値を増やしていく
-
 
 * 秒間どれくらいのリクエストをさばけるか？
 	* Requests per second　を見る
@@ -188,8 +179,10 @@ ab -n 10000 -c 100 http://192.168.0.27/
 |-t TTL値	|パケットのTTL（Time to Live）値を指定する|
 |-v	|詳細情報を表示する|
 
+### 山崎家のサーバで確認
+
 ```bash
-ping -c 5 -s 1400 -i 0.5 157.13.1.1
+ping -c 5 -s 1400 -i 0.5 106.157.214.199
 ```
 
 パケットサイズはフラグメントを起こさないサイズでないとTTLが測定できない
@@ -199,231 +192,41 @@ ping -c 5 -s 1400 -i 0.5 157.13.1.1
 
 * サーバとクライアントで測定する
 * グループ内で互いのIPアドレスを確認する
+* 5201番ポートを開ける
 
-#### サーバ側
+
+### サーバ側
 
 ```bash
 iperf3 -s
 ```
 
-#### クライアント側
+### クライアント側
 
 ```bash
-iperf3 -c 
+iperf3 -c <サーバのIPアドレス>
 ```
+
+#### 山崎家のサーバー
+
+```bash
+iperf3 -c 106.157.214.199
+```
+
 
 ## munin
 
-自分のmunin サイトの状態をを確認
+### 山崎家のサーバの稼働状態
 
-* 1時間程度経過した後
+ブラウザで，http://106.157.214.199/munin/ を確認する
 
-```
-http://106.157.214.199:8010/munin
-```
-
-
-
-
-
-# IPv6
-
-
-
-* 共通のIDとパスワードでログインしてもらいます。
-
-* ログイン後は，これまでと同じです。
-
-### サーバの鍵を消さないと接続できません。
-
-
-## Windows 10  PowerShell の場合
-
-.ssh というファイルがサーバの鍵です
+### グループ内の他の人のマシンの状況を確認
 
 ```
-cd ~
-rm .ssh
-```
- 
-## Windows 10 Putty の場合
-
-すみません。難しいので PowerShell でやってください
-
-## MacOSX ターミナルの場合
-
-```
-cd ~
-rm -fr .ssh
-```
-
-# SSHログイン(IPアドレス 106.157.214.199)
-
-### kindai という共通ユーザIDでログインしてください
-
-* ID: kindai
-* パスワード：nas......jin
-
-```bash
-ssh kindai@106.157.214.199
-```
-
-
-#### ipv6アドレスの確認
-
-```
-ifconfig
-```
-
-```
-ip -6 a
-```
-
-* グローバルユニキャストアドレスの確認
-* eno1 の 240f:で始まるアドレスをメモ
-
-* リンクローカルユニキャストアドレスの確認
-* eno1 の fe80:: で始まるアドレスをメモ
-
-
-#### netstat
- 
- ```
- netstat -rnA inet6
- ```
-
-### ipv6 ルーティングテーブルの確認
-
-```
-ip -6 r
-```
-
-#### DNS でIPv6アドレスを確認
-
-## DNSの　ipv6 アドレス
-
-山崎家のプロバイダのDNS
-
-```
-2001:268:fd07:4::1
-```
-
-```
-whois 2001:268:fd07:4::1
-```
-
-
-#### ping6　で ipv6 のDNSサーバまでping をかけてみる
-
-```
-ping6 2001:268:fd07:4::1
-```
-
-#### google のipv6アドレスの確認
-
-```
-host -t AAAA ipv6.google.com
- 
- 
-2404:6800:4004:80b::200e
- 
-ping6 2404:6800:4004:80b::200e
-```
-
-```
-ping6 ipv6.google.com
-```
-
-## traceroute
-
-```
-traceroute google.com
-```
-
-### DNS でIPアドレスを確認
-
-```
-host -t AAAA google.com
+http://<他の人のIPアドレス>/munin/
 ```
 
 
 
 
-### Rマシンへssh (これまで同様自分のアカウントでログインできます）
 
-```bash
-ssh ユーザID@192.168.0.27
-```
-
-#### ipv6アドレスの確認
-
-```
-ifconfig
-```
-
-```
-ip -6 a
-```
-
-#### netstat
- 
- ```
- netstat -rnA inet6
- ```
-
-## ping による速度測定
-
-### ipv4の速度
-
-google.com
-
-```
-host -t A google.com
-```
-
-
-```
-ping -c 5 -s 1400 -i 0.5 172.217.161.206
-```
-
-### ipv6の速度
-
-```
-host -t AAAA google.com
-```
-
-
-```
-ping6 -c 5 -s 1400 -i 0.5 2404:6800:400a:80b::200e
-```
-
-
-### A0マシンへssh (これまで同様自分のアカウントでログインできます）
-
-```bash
-ssh ユーザID@192.168.0.35
-```
-
-
-#### ipv6アドレスの確認
-
-```
-ifconfig
-
-```
-
-### netstat
- 
- ```
- netstat -rnA inet6
- ```
- 
-## ipv6ではルーティングできていない
-
-以下は失敗する
-
-```
-ping6 2404:6800:4004:818::200e
-```
-
- 
