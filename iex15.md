@@ -15,6 +15,7 @@ ip -6 a
 * eno1 の fe80:: で始まるアドレスをメモ
 
 
+
 ### ipv6 ルーティングテーブルの確認
 
 ```
@@ -38,7 +39,11 @@ dns64.dns.google has IPv6 address 2001:4860:4860::6464
 #### ping6　で ipv6 のDNSサーバまでping をかけてみる
 
 ```
+
 ping6 2001:4860:4860::64
+ping6 2001:4860:4860::6464
+
+ping6 2001:4860:4860::8888
 ```
 
 #### google のipv6アドレスの確認
@@ -56,11 +61,6 @@ ping6 2404:6800:4004:80b::200e
 ping6 ipv6.google.com
 ```
 
-## traceroute
-
-```
-traceroute google.com
-```
 
 ### DNS でIPアドレスを確認
 
@@ -68,30 +68,11 @@ traceroute google.com
 host -t AAAA google.com
 ```
 
-
-
-
-### Rマシンへssh (これまで同様自分のアカウントでログインできます）
-
-```bash
-ssh ユーザID@192.168.0.27
-```
-
 #### ipv6アドレスの確認
-
-```
-ifconfig
-```
 
 ```
 ip -6 a
 ```
-
-#### netstat
- 
- ```
- netstat -rnA inet6
- ```
 
 ## ping による速度測定
 
@@ -116,36 +97,8 @@ host -t AAAA google.com
 
 
 ```
-ping6 -c 5 -s 1400 -i 0.5 2404:6800:400a:80b::200e
+ping6 -c 5 -s 1400 -i 0.5 google.com
 ```
 
-
-### A0マシンへssh (これまで同様自分のアカウントでログインできます）
-
-```bash
-ssh ユーザID@192.168.0.35
-```
-
-
-#### ipv6アドレスの確認
-
-```
-ifconfig
-
-```
-
-### netstat
- 
- ```
- netstat -rnA inet6
- ```
- 
-## ipv6ではルーティングできていない
-
-以下は失敗する
-
-```
-ping6 2404:6800:4004:818::200e
-```
 
  
